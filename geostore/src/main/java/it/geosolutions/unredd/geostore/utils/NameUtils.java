@@ -1,0 +1,55 @@
+/*
+ *  Copyright (C) 2007 - 2012 GeoSolutions S.A.S.
+ *  http://www.geo-solutions.it
+ * 
+ *  GPLv3 + Classpath exception
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package it.geosolutions.unredd.geostore.utils;
+
+/**
+ * Some utils to create names in UNREDD beans.
+ *
+ * @author ETj (etj at geo-solutions.it)
+ */
+public class NameUtils {
+    
+    public static String buildLayerUpdateName(String layerName, String year, String month) {
+        return buildNameYearMonth(layerName, year, month);
+    }
+
+    public static String buildStatsDataName(String statsDefName, String year, String month) {
+        return buildNameYearMonth(statsDefName, year, month);
+    }
+
+    /**
+     * Build the filename for the tif file.
+     */
+    public static String buildTifFileName(String layerName, String year, String month) {
+        return buildNameYearMonth(layerName, year, month) + ".tif";
+    }
+
+    protected static String buildNameYearMonth(String name, String year, String month) {
+        StringBuilder sb = new StringBuilder(name);
+        sb.append('_').append(year);
+        if (month != null) {
+            sb.append('-');
+            if(month.length() == 1)
+                sb.append('0');
+            sb.append(month);
+        }
+        return sb.toString();
+    }
+}

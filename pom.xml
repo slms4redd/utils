@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =======================================================================    
+        Maven Project Configuration File                                        
+                                                                                
+        GeoSolutions GeoBatch Project                                                    
+            http://geobatch.codehaus.org
+                                                                                            
+        Version: $Id: pom.xml 329 2011-06-14 13:00:49Z ccancellieri $              
+     ======================================================================= -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+           xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                               http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+  <!-- =========================================================== -->
+  <!--     Module Description                                      -->
+  <!-- =========================================================== -->
+    <groupId>it.geosolutions.unredd</groupId>
+    <artifactId>unredd-utils</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>UN-REDD utils: root</name>
+    <description>UNREDD util libraries - Root module</description>
+<!--     <url>http://www.geo-solutions.it/maven_reports/gb/</url> -->
+  
+<!--    <scm>
+        <connection>scm:svn:http://svn.geotools.org/geotools/trunk/gt/modules/</connection>
+        <url>http://svn.geotools.org/geotools/trunk/gt/modules/</url>
+    </scm>
+-->  
+    <licenses>
+        <license>
+            <name>Lesser General Public License (LGPL)</name>
+            <url>http://www.gnu.org/copyleft/lesser.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <gt.version>8-SNAPSHOT</gt.version>
+        <gb.version>1.0-</gb.version>
+    </properties>
+
+
+    <modules>
+        <module>geostore</module>
+    </modules>
+
+  <!-- =========================================================== -->
+  <!--     Dependency Management                                   -->
+  <!-- =========================================================== -->
+    <dependencies>
+   	
+        <!-- =========================================================== -->
+        <!-- UNREDD modules -->
+        <!-- =========================================================== -->
+<!--
+		<dependency>
+            <groupId>it.geosolutions.geobatch.unredd</groupId>
+            <artifactId>gb-action-unredd-rasterize</artifactId>
+            <version>${gb.version}</version>
+        </dependency>
+		
+        <dependency>
+            <groupId>it.geosolutions.geobatch.unredd</groupId>
+            <artifactId>gb-action-unredd-geostore</artifactId>
+            <version>${gb.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>it.geosolutions.unredd</groupId>
+            <artifactId>teststats</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        
+         <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-property</artifactId>
+            <version>${gt.version}</version> 
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-sample-data</artifactId>
+            <version>${gt.version}</version> 
+            <scope>test</scope>
+        </dependency> 
+-->
+    </dependencies>
+</project>
