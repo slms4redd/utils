@@ -60,7 +60,7 @@
     <properties>
         <!-- <gt.version>8-SNAPSHOT</gt.version> -->
         <!-- <gb.version>1.0</gb.version> -->
-        <gst.version>1.0-SNAPSHOT</gst.version>
+        <gst.version>1.0</gst.version>
     </properties>
     
     <repositories>

@@ -39,7 +39,7 @@
     </licenses>
 
     <properties>
-        <gt.version>8-SNAPSHOT</gt.version>
+        <gt.version>8.0</gt.version>
         <gb.version>1.0-</gb.version>
     </properties>
 
