@@ -29,7 +29,8 @@ public enum UNREDDCategories {
     STATSDEF("StatsDef"),
     STATSDATA("StatsData"),
     CHARTSCRIPT("ChartScript"),
-    CHARTDATA("ChartData");
+    CHARTDATA("ChartData"),
+    FEEDBACK("Feedback");
 
     private String name;
 

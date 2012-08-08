@@ -123,6 +123,23 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
     public void setAttribute(A att, String value) {
         setAttribute(att.getName(), value);
     }
+    
+	/**
+	 * Set a collection of attributes.
+	 * 
+	 * Only those attributes whose key is declared in the
+	 * {@link Attributes attributes model} will be processed.
+	 * The rest will be ignored.
+	 * 
+	 * @param attributes The attributes to be set.
+	 */
+	public void setAttributes(Map<String, String> attributes) {
+		for (String key : this.getAttributeMap().keySet()) {
+			if (attributes.containsKey(key)) {
+				this.setAttribute(key, attributes.get(key));
+			}
+		}
+	}
 
     protected void setAttribute(String name, String value) {
 

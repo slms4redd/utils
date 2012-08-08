@@ -6,7 +6,10 @@ import it.geosolutions.geostore.core.model.StoredData;
 import it.geosolutions.geostore.core.model.enums.DataType;
 import it.geosolutions.geostore.services.dto.ShortResource;
 import it.geosolutions.geostore.services.dto.search.*;
+import it.geosolutions.geostore.services.exception.BadRequestServiceEx;
 import it.geosolutions.geostore.services.rest.GeoStoreClient;
+import it.geosolutions.geostore.services.rest.model.RESTCategory;
+import it.geosolutions.geostore.services.rest.model.RESTResource;
 import it.geosolutions.geostore.services.rest.model.ShortResourceList;
 import it.geosolutions.unredd.geostore.model.*;
 import it.geosolutions.unredd.geostore.utils.NameUtils;
@@ -238,6 +241,30 @@ public class UNREDDGeostoreManager {
         return getResourceList(list);
     }
 
+    /**
+     * Returns all feedback resources
+     */
+    public List<Resource> getFeedbacks() throws UnsupportedEncodingException, JAXBException {
+        SearchFilter filter = createCategoryFilter(UNREDDCategories.FEEDBACK);
+        ShortResourceList list = client.searchResources(filter);
+        
+        return getResourceList(list);
+    }
+    
+    /**
+     * Inserts a feedback resource
+     */
+	public void insertFeedback(Map<String, String> attributes, String data) {
+		UNREDDFeedback feedback = new UNREDDFeedback();
+		feedback.setAttributes(attributes);
+		
+		RESTResource resource = feedback.createRESTResource();
+		resource.setData(data);
+		resource.setName(String.valueOf(resource.hashCode()));
+
+		client.insert(resource);
+	}
+    
     public Resource searchResourceByName(String resourceName)
     {
         SearchFilter searchFilter = new FieldFilter(BaseField.NAME, resourceName, SearchOperator.EQUAL_TO);
