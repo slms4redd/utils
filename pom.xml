@@ -46,6 +46,8 @@
 
     <modules>
         <module>geostore</module>
+	<module>appstats</module>
+	<module>apparealayer</module>
     </modules>
 
   <!-- =========================================================== -->
