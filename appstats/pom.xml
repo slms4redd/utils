@@ -24,7 +24,6 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-process-raster</artifactId>
-            <version>${gt.version}</version>
             <!--
 [INFO] +- org.geotools:gt-process-raster:jar:8-SNAPSHOT:compile
 [INFO] |  +- org.geotools:gt-process:jar:8-SNAPSHOT:compile
@@ -55,26 +54,16 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-
-
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-geotiff</artifactId>
-            <version>${gt.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.geotools</groupId>
-            <artifactId>gt-epsg-wkt</artifactId>
-            <version>${gt.version}</version>
+            <artifactId>gt-epsg-hsql</artifactId>
         </dependency>
 
-        <dependency>
-          <groupId>org.geotools</groupId>
-          <artifactId>gt-coverage</artifactId>
-            <version>${gt.version}</version>
-        </dependency>
+    
 
         <!-- =========================================================== -->
         <!-- JAITools -->
@@ -83,36 +72,27 @@
         <dependency>
             <groupId>org.jaitools</groupId>
             <artifactId>jt-classifiedstats</artifactId>
-            <version>${jt.version}</version>
         </dependency>
-
         <dependency>
           <groupId>org.jaitools</groupId>
           <artifactId>jt-utils</artifactId>
-          <version>${jt.version}</version>
         </dependency>
-
         <!-- Set proper version for deps needed by GT -->
-
         <dependency>
             <groupId>org.jaitools</groupId>
             <artifactId>jt-zonalstats</artifactId>
-            <version>${jt.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jaitools</groupId>
             <artifactId>jt-rangelookup</artifactId>
-            <version>${jt.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jaitools</groupId>
             <artifactId>jt-contour</artifactId>
-            <version>${jt.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jaitools</groupId>
             <artifactId>jt-vectorize</artifactId>
-            <version>${jt.version}</version>
         </dependency>
 
         <!-- =========================================================== -->
@@ -120,17 +100,9 @@
         <!-- =========================================================== -->
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>3.0.6.RELEASE</version>
-
             <scope>test</scope>
         </dependency>
 

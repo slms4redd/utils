@@ -45,10 +45,7 @@
         </license>
     </licenses>
 
-    
-    <!-- =========================================================== -->
-    <!--     Dependency Management                                   -->
-    <!-- =========================================================== -->
+
     <dependencies>
 
         <!-- =========================================================== -->
@@ -58,22 +55,18 @@
         <dependency>
             <groupId>it.geosolutions.geostore</groupId>
             <artifactId>geostore-model</artifactId>
-            <version>${gst.version}</version>
         </dependency>
         <dependency>
             <groupId>it.geosolutions.geostore</groupId>
             <artifactId>geostore-services-api</artifactId>
-            <version>${gst.version}</version>
         </dependency>
         <dependency>
             <groupId>it.geosolutions.geostore</groupId>
             <artifactId>geostore-rest-api</artifactId>
-            <version>${gst.version}</version>
         </dependency>
         <dependency>
             <groupId>it.geosolutions.geostore</groupId>
             <artifactId>geostore-rest-client</artifactId>
-            <version>${gst.version}</version>
         </dependency>
 
         <!-- =========================================================== -->
@@ -98,11 +91,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
-            <scope>test</scope>
-        </dependency>
+     
     </dependencies>
 </project>

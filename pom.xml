@@ -56,46 +56,125 @@
   <!-- =========================================================== -->
   <!--     Dependency Management                                   -->
   <!-- =========================================================== -->
+  <dependencyManagement>
     <dependencies>
+    
+      <!-- GeoTools -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-process-raster</artifactId>
+            <version>${gt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-geotiff</artifactId>
+            <version>${gt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-epsg-hsql</artifactId>
+            <version>${gt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-process-raster</artifactId>
+            <version>${gt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-geotiff</artifactId>
+            <version>${gt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-epsg-wkt</artifactId>
+            <version>${gt.version}</version>
+        </dependency>
+
+        <dependency>
+          <groupId>org.geotools</groupId>
+          <artifactId>gt-coverage</artifactId>
+            <version>${gt.version}</version>
+        </dependency>        
+
+        <!-- =========================================================== -->
+        <!-- GeoStore -->
+        <!-- =========================================================== -->
+
+        <dependency>
+            <groupId>it.geosolutions.geostore</groupId>
+            <artifactId>geostore-model</artifactId>
+            <version>${gst.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>it.geosolutions.geostore</groupId>
+            <artifactId>geostore-services-api</artifactId>
+            <version>${gst.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>it.geosolutions.geostore</groupId>
+            <artifactId>geostore-rest-api</artifactId>
+            <version>${gst.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>it.geosolutions.geostore</groupId>
+            <artifactId>geostore-rest-client</artifactId>
+            <version>${gst.version}</version>
+        </dependency>
+        
+        <!-- =========================================================== -->
+        <!-- JAITools -->
+        <!-- =========================================================== -->
+
+        <dependency>
+            <groupId>org.jaitools</groupId>
+            <artifactId>jt-classifiedstats</artifactId>
+            <version>${jt.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.jaitools</groupId>
+          <artifactId>jt-utils</artifactId>
+          <version>${jt.version}</version>
+        </dependency>
+        <!-- Set proper version for deps needed by GT -->
+        <dependency>
+            <groupId>org.jaitools</groupId>
+            <artifactId>jt-zonalstats</artifactId>
+            <version>${jt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jaitools</groupId>
+            <artifactId>jt-rangelookup</artifactId>
+            <version>${jt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jaitools</groupId>
+            <artifactId>jt-contour</artifactId>
+            <version>${jt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jaitools</groupId>
+            <artifactId>jt-vectorize</artifactId>
+            <version>${jt.version}</version>
+        </dependency>        
+
+        <!-- =========================================================== -->        
    	
         <!-- =========================================================== -->
         <!-- UNREDD modules -->
         <!-- =========================================================== -->
-<!--
-		<dependency>
-            <groupId>it.geosolutions.geobatch.unredd</groupId>
-            <artifactId>gb-action-unredd-rasterize</artifactId>
-            <version>${gb.version}</version>
-        </dependency>
-		
-        <dependency>
-            <groupId>it.geosolutions.geobatch.unredd</groupId>
-            <artifactId>gb-action-unredd-geostore</artifactId>
-            <version>${gb.version}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>it.geosolutions.unredd</groupId>
-            <artifactId>teststats</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        
-         <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-property</artifactId>
-            <version>${gt.version}</version> 
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-sample-data</artifactId>
-            <version>${gt.version}</version> 
-            <scope>test</scope>
-        </dependency> 
--->
     </dependencies>
+    </dependencyManagement>
     
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>    
 
     <repositories>
 

@@ -17,12 +17,7 @@
     <name>UN-REDD app: AreaLayer builder</name>
 
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
+
 
         <dependency>
             <groupId>log4j</groupId>
@@ -45,20 +40,17 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-process-raster</artifactId>
-            <version>${gt.version}</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-geotiff</artifactId>
-            <version>${gt.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.geotools</groupId>
-            <artifactId>gt-epsg-wkt</artifactId>
-            <version>${gt.version}</version>
+            <artifactId>gt-epsg-hsql</artifactId>
         </dependency>
 
 
