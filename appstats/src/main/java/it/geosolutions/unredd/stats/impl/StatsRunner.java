@@ -22,7 +22,7 @@ package it.geosolutions.unredd.stats.impl;
 import it.geosolutions.unredd.stats.model.config.ClassificationLayer;
 import it.geosolutions.unredd.stats.model.config.StatisticConfiguration;
 import it.geosolutions.unredd.stats.model.config.StatsType;
-import java.awt.image.renderable.RenderedImageFactory;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -34,14 +34,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import javax.media.jai.JAI;
-import javax.media.jai.OperationDescriptor;
-import javax.media.jai.OperationRegistry;
-import javax.media.jai.registry.RenderedRegistryMode;
+
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.log4j.Logger;
-import org.jaitools.media.jai.classifiedstats.ClassifiedStatsDescriptor;
-import org.jaitools.media.jai.classifiedstats.ClassifiedStatsRIF;
 import org.jaitools.media.jai.classifiedstats.Result;
 import org.jaitools.numeric.Statistic;
 

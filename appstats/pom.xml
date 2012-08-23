@@ -20,22 +20,9 @@
         <!-- =========================================================== -->
         <!-- GeoTools -->
         <!-- =========================================================== -->
-
         <dependency>
             <groupId>org.geotools</groupId>
-            <artifactId>gt-process-raster</artifactId>
-            <!--
-[INFO] +- org.geotools:gt-process-raster:jar:8-SNAPSHOT:compile
-[INFO] |  +- org.geotools:gt-process:jar:8-SNAPSHOT:compile
-[INFO] |  |  \- org.geotools:gt-cql:jar:8-SNAPSHOT:compile
-[INFO] |  +- org.geotools:gt-render:jar:8-SNAPSHOT:compile
-[INFO] |  +- org.jaitools:jt-zonalstats:jar:1.2.0:compile
-[INFO] |  +- org.jaitools:jt-rangelookup:jar:1.2.0:compile
-[INFO] |  +- org.jaitools:jt-contour:jar:1.2.0:compile
-[INFO] |  |  \- org.jaitools:jt-attributeop:jar:1.2.0:compile
-[INFO] |  \- org.jaitools:jt-vectorize:jar:1.2.0:compile
--->
-            <exclusions>
+            <artifactId>gt-coverage</artifactId><exclusions>
                 <exclusion>
                     <groupId>org.jaitools</groupId>
                     <artifactId>jt-zonalstats</artifactId>
@@ -53,52 +40,30 @@
                     <artifactId>jt-vectorize</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+            <scope>test</scope>
+        </dependency>      
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-geotiff</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-epsg-hsql</artifactId>
+            <scope>test</scope>
         </dependency>
-
-    
 
         <!-- =========================================================== -->
         <!-- JAITools -->
         <!-- =========================================================== -->
-
         <dependency>
             <groupId>org.jaitools</groupId>
             <artifactId>jt-classifiedstats</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.jaitools</groupId>
-          <artifactId>jt-utils</artifactId>
-        </dependency>
-        <!-- Set proper version for deps needed by GT -->
-        <dependency>
-            <groupId>org.jaitools</groupId>
-            <artifactId>jt-zonalstats</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jaitools</groupId>
-            <artifactId>jt-rangelookup</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jaitools</groupId>
-            <artifactId>jt-contour</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jaitools</groupId>
-            <artifactId>jt-vectorize</artifactId>
         </dependency>
 
         <!-- =========================================================== -->
         <!--  -->
         <!-- =========================================================== -->
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -115,7 +80,6 @@
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
-            <version>1.2</version>
         </dependency>
 
 
@@ -125,20 +89,10 @@
           <version>3.0</version>
         </dependency>
         <dependency>
-          <groupId>javax.media</groupId>
-          <artifactId>jai_imageio</artifactId>
-          <version>1.1</version>
-        </dependency>
-        <dependency>
           <groupId>org.springframework</groupId>
           <artifactId>spring-core</artifactId>
           <version>3.0.6.RELEASE</version>
           <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>javax.media</groupId>
-          <artifactId>jai_core</artifactId>
-          <version>1.1.3</version>
         </dependency>
     </dependencies>
 
@@ -179,35 +133,6 @@
                     </archive>
                 </configuration>
             </plugin>
-
-<!--            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-
-                <configuration>
-                    <filters>
-                        <filter>
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/*.SF</exclude>
-                                <exclude>META-INF/*.DSA</exclude>
-                                <exclude>META-INF/*.RSA</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
-                </configuration>
-            </plugin>-->
-
         </plugins>
     </build>
-
 </project>
