@@ -35,8 +35,8 @@ public class UNREDDFeedbackTest {
 		//createCategory();
 		//listCategories();
 		
-		insertFeedback();
-		listFeedbacks();
+		//insertFeedback();
+		//listFeedbacks();
 	}
 
 	private void createCategory() {
