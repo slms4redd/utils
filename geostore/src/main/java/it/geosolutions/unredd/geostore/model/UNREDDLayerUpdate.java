@@ -58,7 +58,8 @@ public class UNREDDLayerUpdate
 
         public final static Attributes YEAR      = new Attributes("Year",    DataType.STRING); // used to be a Number, but it returned as a float ("2010.0")
         public final static Attributes MONTH     = new Attributes("Month",   DataType.STRING);
-
+        public final static Attributes DAY       = new Attributes("Day",     DataType.STRING);
+        
         public final static Attributes PUBLISHED = new Attributes("Published", DataType.STRING);
 
         private Attributes(String name, DataType dataType) {
@@ -74,11 +75,13 @@ public class UNREDDLayerUpdate
         super(resource);
     }
 
-    public UNREDDLayerUpdate(String layerName, String year, String month) {
+    public UNREDDLayerUpdate(String layerName, String year, String month, String day) {
         setAttribute(Attributes.LAYER, layerName);
         setAttribute(Attributes.YEAR, year);
         if(month != null)
             setAttribute(Attributes.MONTH, month);
+        if(day != null)
+            setAttribute(Attributes.DAY, day);
     }
 
     @Override
