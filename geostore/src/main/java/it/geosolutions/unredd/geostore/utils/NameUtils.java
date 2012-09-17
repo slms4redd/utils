@@ -26,22 +26,22 @@ package it.geosolutions.unredd.geostore.utils;
  */
 public class NameUtils {
     
-    public static String buildLayerUpdateName(String layerName, String year, String month) {
-        return buildNameYearMonth(layerName, year, month);
+    public static String buildLayerUpdateName(String layerName, String year, String month, String day) {
+        return buildNameYearMonth(layerName, year, month, day);
     }
 
-    public static String buildStatsDataName(String statsDefName, String year, String month) {
-        return buildNameYearMonth(statsDefName, year, month);
+    public static String buildStatsDataName(String statsDefName, String year, String month, String day) {
+        return buildNameYearMonth(statsDefName, year, month, day);
     }
 
     /**
      * Build the filename for the tif file.
      */
-    public static String buildTifFileName(String layerName, String year, String month) {
-        return buildNameYearMonth(layerName, year, month) + ".tif";
+    public static String buildTifFileName(String layerName, String year, String month, String day) {
+        return buildNameYearMonth(layerName, year, month, day) + ".tif";
     }
 
-    protected static String buildNameYearMonth(String name, String year, String month) {
+    protected static String buildNameYearMonth(String name, String year, String month, String day) {
         StringBuilder sb = new StringBuilder(name);
         sb.append('_').append(year);
         if (month != null) {
@@ -49,6 +49,12 @@ public class NameUtils {
             if(month.length() == 1)
                 sb.append('0');
             sb.append(month);
+        }
+        if (day != null) {
+            sb.append('-');
+            if(day.length() == 1)
+                sb.append('0');
+            sb.append(day);
         }
         return sb.toString();
     }

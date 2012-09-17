@@ -82,8 +82,8 @@ public class UNREDDGeostoreManager {
      * @param month
      * @return
      */
-    public boolean existLayerUpdate(String baseLayerName, String year, String month) {
-        String layerName = NameUtils.buildLayerUpdateName(baseLayerName, year, month);
+    public boolean existLayerUpdate(String baseLayerName, String year, String month, String day) {
+        String layerName = NameUtils.buildLayerUpdateName(baseLayerName, year, month, day);
         return existResourceInCategory(layerName, UNREDDCategories.LAYERUPDATE);
     }
 
