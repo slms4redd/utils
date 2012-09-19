@@ -111,7 +111,11 @@ public class UNREDDLayer
          * Table attrib containing the month info as a 2-digits string.
          * This attrib is not in the original shapefile: it's added to every feature by the ingestion flow*/
         public final static Attributes MONTHATTRIBNAME      = new Attributes("MonthAttribName", DataType.STRING);
-
+        /** DB Storage for vector data.
+         * Table attrib containing the day info as a 2-digits string.
+         * This attrib is not in the original shapefile: it's added to every feature by the ingestion flow*/
+        public final static Attributes DAYATTRIBNAME      = new Attributes("DayAttribName", DataType.STRING);
+        
         private Attributes(String name, DataType dataType) {
             super(name, dataType);
             map.put(name, dataType);
