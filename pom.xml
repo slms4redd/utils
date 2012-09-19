@@ -53,6 +53,17 @@
 	<module>apparealayer</module>
     </modules>
 
+    <distributionManagement>
+    <!--..................................-->
+    <!--      GeoSolutions Repository     -->
+    <!--..................................-->
+      <repository>
+        <uniqueVersion>false</uniqueVersion>
+        <id>geosolutions</id>
+        <url>ftp://maven.geo-solutions.it</url>
+      </repository>
+    </distributionManagement>
+
   <!-- =========================================================== -->
   <!--     Dependency Management                                   -->
   <!-- =========================================================== -->
@@ -271,6 +282,13 @@
                 </configuration>
             </plugin>
         </plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-beta-7</version>
+			</extension>
+		</extensions>
     </build>
         
 </project>
