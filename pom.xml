@@ -52,6 +52,16 @@
 	<module>appstats</module>
 	<module>apparealayer</module>
     </modules>
+    
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/nfms4redd/nfms-utils/issues</url>
+    </issueManagement>
+
+    <scm>
+	<url>https://github.com/nfms4redd/nfms-utils</url>
+        <connection>scm:git:git@github.com:nfms4redd/nfms-utils.git</connection>
+    </scm>
 
     <distributionManagement>
     <!--..................................-->
@@ -279,6 +289,30 @@
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+	    <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.2.2</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
         </plugins>
