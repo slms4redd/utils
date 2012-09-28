@@ -4,12 +4,12 @@
     <parent>
         <groupId>it.geosolutions.unredd</groupId>
         <artifactId>unredd-utils</artifactId>
-        <version>1.0</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
 
     <groupId>it.geosolutions.unredd</groupId>
     <artifactId>teststats</artifactId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>UN-REDD app: Stats</name>
