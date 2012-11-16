@@ -73,10 +73,14 @@ public class UNREDDFeedback extends UNREDDResource<UNREDDFeedback.Attributes, UN
          */
         public final static Attributes USERNAME  = new Attributes("UserName", DataType.STRING);
         /**
-         * The user contant mail, as filled in the feedback form.
+         * The user contact mail, as filled in the feedback form.
          */
         public final static Attributes USERMAIL  = new Attributes("UserMail", DataType.STRING);
-
+        /**
+         * The feedback status, "submitted" when entered, and then edited by the data administrator
+         */
+        //public final static Attributes STATUS  = new Attributes("Status", DataType.STRING);
+        
         private Attributes(String name, DataType dataType) {
             super(name, dataType);
             map.put(name, dataType);
