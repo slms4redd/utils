@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+  <layername>paraguay_ndvi</layername>
+  <format>raster</format>
+  <year>_YEAR_</year>
+  <month>_MONTH_</month>
+  <day>_DAY_</day>
+</info>

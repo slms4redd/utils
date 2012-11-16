@@ -56,6 +56,11 @@ public class UNREDDLayer
          */
         public final static Attributes LAYERTYPE            = new Attributes("LayerType", DataType.STRING);
         /**
+         * Should be an existing style on target geoserver. It could be blank or nullable. In that case 
+         * will be selected a default geoserver style
+         */
+        public final static Attributes LAYERSTYLE            = new Attributes("LayerStyle", DataType.STRING);
+        /**
          * Full path where the layer tiff should be placed into.
          */
         public final static Attributes MOSAICPATH           = new Attributes("MosaicPath", DataType.STRING);
