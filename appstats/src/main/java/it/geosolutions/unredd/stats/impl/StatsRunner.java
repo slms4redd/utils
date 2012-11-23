@@ -37,6 +37,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.log4j.Logger;
+import org.jaitools.imageutils.ROIGeometry;
 import org.jaitools.media.jai.classifiedstats.Result;
 import org.jaitools.numeric.Statistic;
 
@@ -49,7 +50,7 @@ public class StatsRunner {
 
 
     private final StatisticConfiguration cfg;
-
+    private final ROIGeometry roiGeom;
 
     private Integer countIndex = null;
     private Map<Statistic, Integer> statsIndexes = new EnumMap<Statistic, Integer>(Statistic.class);
@@ -76,6 +77,12 @@ public class StatsRunner {
 
     public StatsRunner(StatisticConfiguration cfg) {
         this.cfg = cfg;
+        this.roiGeom = null;
+    }
+    
+    public StatsRunner(StatisticConfiguration cfg, ROIGeometry roiGeom) {
+        this.cfg = cfg;
+        this.roiGeom = roiGeom;
     }
     
     public void run() throws IOException {
@@ -140,6 +147,7 @@ public class StatsRunner {
         
         LOGGER.info("Running stats...");
         RasterClassifiedStatistics rcs = new RasterClassifiedStatistics();
+        rcs.setRoiGeom(roiGeom);
         Map<MultiKey,List<Result>> results = rcs.execute(deferredMode, data, cls, stats);
 
         LOGGER.info("Outputting stats results...");

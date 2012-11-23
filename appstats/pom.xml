@@ -50,6 +50,11 @@
             <artifactId>gt-epsg-hsql</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-sample-data</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- =========================================================== -->
         <!-- JAITools -->
