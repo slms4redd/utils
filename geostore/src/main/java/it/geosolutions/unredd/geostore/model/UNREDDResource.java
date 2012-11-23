@@ -19,14 +19,17 @@
  */
 package it.geosolutions.unredd.geostore.model;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import it.geosolutions.geostore.core.model.Attribute;
 import it.geosolutions.geostore.core.model.Resource;
 import it.geosolutions.geostore.core.model.enums.DataType;
 import it.geosolutions.geostore.services.dto.ShortAttribute;
-import it.geosolutions.geostore.services.dto.search.AttributeFilter;
-import it.geosolutions.geostore.services.dto.search.SearchOperator;
 import it.geosolutions.geostore.services.rest.model.RESTCategory;
 import it.geosolutions.geostore.services.rest.model.RESTResource;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,15 +74,16 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
     private Map<String, String> attributes = new HashMap<String, String>();
     private Map<String, Attribute> originalAttributes = new HashMap<String, Attribute>();
 
+    private Long id;
+    
     public abstract String getCategoryName();
     protected abstract Map<String, DataType> getAttributeMap();
     protected abstract List<String> getReverseAttributes();
-
+    
     public UNREDDResource() {
     }
 
     public UNREDDResource(Resource resource) {
-
         // category sanity check
         if(! getCategoryName().equals(resource.getCategory().getName())) {
             throw new IllegalArgumentException("Bad resource category " + resource.getCategory().getName() + ": only handling " + getCategoryName());
@@ -104,8 +108,10 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
                 attributes.put(a.getName(), a.getValue());
             }
         }
-
-        // TODO: copy other resource info 
+        
+        // TODO: copy other resource info
+        
+        this.id = resource.getId();
     }
 
     private boolean checkAttribute(String name, String value) {
@@ -246,4 +252,24 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
     public Attribute getOriginalAttribute(A att) {
         return originalAttributes.get(att.getName());
     }
+
+    public static class UNREDDJsonSerializer implements JsonSerializer<UNREDDResource> {
+        @Override
+        public JsonElement serialize(UNREDDResource resource, Type typeOfSrc, JsonSerializationContext context) {
+            System.out.println(resource.originalAttributes); // DEBUG
+            JsonObject obj = new JsonObject();
+            
+            Map<String, String> attributes = resource.attributes;            
+            for (Map.Entry<String, String> attribute : attributes.entrySet()) {
+                obj.addProperty(attribute.getKey(), attribute.getValue());
+            }
+            
+            
+            // TODO: it doesn't handle reverse attributes yet
+            
+            
+            return obj;
+        };
+    }
+
 }

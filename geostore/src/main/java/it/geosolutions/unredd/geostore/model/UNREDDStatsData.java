@@ -57,7 +57,7 @@ public class UNREDDStatsData
         public final static Attributes STATSDEF = new Attributes("StatsDef", DataType.STRING);
         public final static Attributes YEAR     = new Attributes("Year", DataType.STRING); // used to be a Number, but it returned as a float ("2010.0")
         public final static Attributes MONTH    = new Attributes("Month", DataType.STRING);
-        public final static Attributes DAY    = new Attributes("Day", DataType.STRING);
+        public final static Attributes DAY      = new Attributes("Day", DataType.STRING);
 
         private Attributes(String name, DataType dataType) {
             super(name, dataType);
