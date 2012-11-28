@@ -25,6 +25,7 @@ import org.jaitools.numeric.Range;
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.geotools.image.jai.Registry;
 import org.geotools.resources.image.ImageUtilities;
+import org.jaitools.imageutils.ROIGeometry;
 import org.jaitools.media.jai.classifiedstats.ClassifiedStats;
 import org.jaitools.media.jai.classifiedstats.ClassifiedStatsDescriptor;
 import org.jaitools.media.jai.classifiedstats.ClassifiedStatsRIF;
@@ -43,7 +44,15 @@ import org.apache.log4j.Logger;
  */
 public class RasterClassifiedStatistics {
     private final static Logger LOGGER = Logger.getLogger(RasterClassifiedStatistics.class);
+    private ROIGeometry roiGeom;
     
+    /**
+     * @param roiGeom the roiGeom to set
+     */
+    public void setRoiGeom(ROIGeometry roiGeom) {
+        this.roiGeom = roiGeom;
+    }
+
     static {
         try{
             Registry.registerRIF(JAI.getDefaultInstance(), new ClassifiedStatsDescriptor(), new ClassifiedStatsRIF(), Registry.JAI_TOOLS_PRODUCT);
@@ -56,6 +65,9 @@ public class RasterClassifiedStatistics {
         }
     }
 
+    public RasterClassifiedStatistics(){
+        this.roiGeom = null;
+    }
     
     public Map<MultiKey, List<Result>> execute(
             boolean deferredMode,
@@ -104,12 +116,13 @@ public class RasterClassifiedStatistics {
             pb.addSource(dataImage);
             pb.setParameter("classifiers", classifiers);
             pb.setParameter("stats", reqStatsArr);
-
-            if(dataNDR != null)
+            if(dataNDR != null){
                 pb.setParameter("noDataRanges", dataNDR);
-            
+            }
+            if(roiGeom != null){
+                pb.setParameter("roi", roiGeom);
+            }
             pb.setParameter("noDataClassifiers", classNoData);
-            
             // TODO make it configurable
             pb.setParameter("bands", new Integer[]{0});
     
@@ -162,6 +175,8 @@ public class RasterClassifiedStatistics {
 //        System.out.println(stats.band(0).statistic(Statistic.MAX).results().get(new MultiKey(1,50)).get(0));
 
     }
+    
+    
 
     /**
      * Loads a {@link RenderedImage} from the specified file with the specified mode.

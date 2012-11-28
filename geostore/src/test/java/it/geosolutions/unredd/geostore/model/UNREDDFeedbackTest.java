@@ -68,7 +68,8 @@ public class UNREDDFeedbackTest {
 		attributes.put(UNREDDFeedback.Attributes.LAYERDATE.getName(), String.valueOf(now));
 		attributes.put(UNREDDFeedback.Attributes.USERNAME.getName(), name);
 		attributes.put(UNREDDFeedback.Attributes.USERMAIL.getName(), mail);
-			
+		//attributes.put(UNREDDFeedback.Attributes.STATUS.getName(), "submitted");
+        
 		// Send the data
 		manager.insertFeedback(attributes, data);
 	}
