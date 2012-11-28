@@ -21,12 +21,13 @@ package it.geosolutions.unredd.geostore.model;
 
 import it.geosolutions.geostore.core.model.Resource;
 import it.geosolutions.geostore.core.model.enums.DataType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,7 +37,7 @@ public class UNREDDStatsDef
     extends UNREDDResource<UNREDDStatsDef.Attributes,
                            UNREDDStatsDef.ReverseAttributes> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(UNREDDStatsDef.class);
+    //private final static Logger LOGGER = LoggerFactory.getLogger(UNREDDStatsDef.class);
 
     public static final String CATEGORY_NAME = UNREDDCategories.STATSDEF.getName();
 
@@ -83,4 +84,8 @@ public class UNREDDStatsDef
     public String getCategoryName() {
         return CATEGORY_NAME;
     }
+    
+	public List<String> getLayerNames() {
+		return getReverseAttributes(ReverseAttributes.LAYER.getName());
+	}
 }

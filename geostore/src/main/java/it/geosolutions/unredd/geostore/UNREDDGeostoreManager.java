@@ -1,14 +1,11 @@
 package it.geosolutions.unredd.geostore;
 
-
 import it.geosolutions.geostore.core.model.Resource;
 import it.geosolutions.geostore.core.model.StoredData;
 import it.geosolutions.geostore.core.model.enums.DataType;
 import it.geosolutions.geostore.services.dto.ShortResource;
 import it.geosolutions.geostore.services.dto.search.*;
-import it.geosolutions.geostore.services.exception.BadRequestServiceEx;
 import it.geosolutions.geostore.services.rest.GeoStoreClient;
-import it.geosolutions.geostore.services.rest.model.RESTCategory;
 import it.geosolutions.geostore.services.rest.model.RESTResource;
 import it.geosolutions.geostore.services.rest.model.ShortResourceList;
 import it.geosolutions.unredd.geostore.model.*;
@@ -96,6 +93,14 @@ public class UNREDDGeostoreManager {
 
         return getResourceList(list);
     }
+    
+    public List<Resource> searchStatsDefsByChartScript(UNREDDChartScript chartScript) {
+    	List<Resource> statsDefs = new ArrayList<Resource>();
+    	for(String statsDefName : chartScript.getStatsDefNames()) {
+    		statsDefs.add(this.searchResourceByName(statsDefName, UNREDDCategories.STATSDEF));
+    	}
+    	return statsDefs;
+    }
 
     public List<Resource> searchChartScriptByStatsDef(String statsdef) throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = new AndFilter(
@@ -136,7 +141,7 @@ public class UNREDDGeostoreManager {
         
         ShortResourceList list = client.searchResources(filter);
 
-        Map resources = new HashMap();
+        Map<Resource, String> resources = new HashMap<Resource, String>();
         if (list.getList() != null && !list.getList().isEmpty()) {
             for (ShortResource shortResource : list.getList()) {
                 Resource resource = client.getResource(shortResource.getId());
@@ -199,12 +204,20 @@ public class UNREDDGeostoreManager {
         return resourceList.get(0);
     }
     
+	public List<Resource> searchLayersByStatsDef(UNREDDStatsDef statsDef) {
+    	List<Resource> layers = new ArrayList<Resource>();
+    	for(String layerName : statsDef.getLayerNames()) {
+    		layers.add(this.searchResourceByName(layerName, UNREDDCategories.LAYER));
+    	}
+    	return layers;
+	}
+    
     /*********
      * Returns a list of layerUpdate objects having attribute Layer=layerName
      * @param statsDefName
      * @return
      */
-    public List<Resource> searchLayerUpdatesByLayerName(String layerName) throws UnsupportedEncodingException, JAXBException {
+    public List<Resource> searchLayerUpdatesByLayerName(String layerName) {
         SearchFilter filter = new AndFilter(
                 createCategoryFilter(UNREDDCategories.LAYERUPDATE),
                 createAttributeFilter(UNREDDLayerUpdate.Attributes.LAYER, layerName)
@@ -214,7 +227,7 @@ public class UNREDDGeostoreManager {
 
         return getResourceList(list);
     }
-        
+
     /*********
      * Returns a list of ChartData objects having attribute CHARTSCRIPT=chartScriptName
      * @param statsDefName
@@ -229,7 +242,7 @@ public class UNREDDGeostoreManager {
 
         return getResourceList(list);
     }
-        
+            
     /*********
      * Returns the list of all stat defs
      * @return
@@ -292,7 +305,7 @@ public class UNREDDGeostoreManager {
         
         return null;
     }
-    
+        
     /*********
      * Returns the list of all layers
      * @return
@@ -320,7 +333,7 @@ public class UNREDDGeostoreManager {
      * @return
      */
     private List<Resource> getResourceList(ShortResourceList list) {
-        ArrayList resources = new ArrayList();
+        ArrayList<Resource> resources = new ArrayList<Resource>();
         if ( CollectionUtils.isNotEmpty(list.getList()) ) {
             for (ShortResource shortResource : list.getList()) {
                 Resource resource = client.getResource(shortResource.getId());
@@ -410,4 +423,5 @@ public class UNREDDGeostoreManager {
     private static SearchFilter createAttributeFilter(ReverseAttributeDef at, String value) {
         return new AttributeFilter(value, at.getName(), DataType.STRING, SearchOperator.EQUAL_TO);
     }
+
 }

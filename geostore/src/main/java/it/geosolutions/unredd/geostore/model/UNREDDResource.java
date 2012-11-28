@@ -21,6 +21,7 @@ package it.geosolutions.unredd.geostore.model;
 
 import it.geosolutions.geostore.core.model.Attribute;
 import it.geosolutions.geostore.core.model.Resource;
+import it.geosolutions.geostore.core.model.StoredData;
 import it.geosolutions.geostore.core.model.enums.DataType;
 import it.geosolutions.geostore.services.dto.ShortAttribute;
 import it.geosolutions.geostore.services.dto.search.AttributeFilter;
@@ -68,6 +69,11 @@ import org.slf4j.LoggerFactory;
 public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAttributeDef> {
     private final static Logger LOGGER = LoggerFactory.getLogger(UNREDDResource.class);
 
+    Long id;
+    String name;
+    String description;
+    String data;
+    
     private Map<String, String> attributes = new HashMap<String, String>();
     private Map<String, Attribute> originalAttributes = new HashMap<String, Attribute>();
 
@@ -85,6 +91,14 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
             throw new IllegalArgumentException("Bad resource category " + resource.getCategory().getName() + ": only handling " + getCategoryName());
         }
 
+        // Copy essential resource info
+        id = resource.getId();
+        name = resource.getName();
+        description = resource.getDescription();
+        if (resource.getData() != null) {
+        	data = resource.getData().getData();
+        }
+        
         // copy attribs
         if (resource.getAttribute() != null) { // SG - when there are no attributes, resource.getAttribute() returns null - can't modify resource.getAttribute()
             for (Attribute a : resource.getAttribute()) {
@@ -105,10 +119,26 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
             }
         }
 
-        // TODO: copy other resource info 
+        // TODO: copy other resource info
     }
 
-    private boolean checkAttribute(String name, String value) {
+    public Long getId() {
+		return id;
+	}
+    
+	public String getName() {
+		return name;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public String getData() {
+		return data;
+	}
+	
+	private boolean checkAttribute(String name, String value) {
         boolean direct = getAttributeMap().containsKey(name);
         boolean reverse = getReverseAttributes().contains(value);
 
@@ -225,7 +255,7 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
     }
 
     public List<ShortAttribute> createShortAttributeList() {
-        List ret = new ArrayList();
+        List<ShortAttribute> ret = new ArrayList<ShortAttribute>();
         for (String name : attributes.keySet()) {
             ret.add(createShortAttribute(name));
         }
@@ -239,6 +269,10 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
 
         RESTResource resource = new RESTResource();
         resource.setCategory(cat);
+        resource.setId(getId());
+        resource.setName(getName());
+        resource.setDescription(getDescription());
+        resource.setData(getData());
         resource.setAttribute(createShortAttributeList());
         return resource;
     }
