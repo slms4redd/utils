@@ -22,12 +22,14 @@
 package it.geosolutions.unredd;
 
 import it.geosolutions.unredd.stats.impl.StatsRunner;
+import it.geosolutions.unredd.stats.model.config.Output;
 import it.geosolutions.unredd.stats.model.config.StatisticConfiguration;
 import it.geosolutions.unredd.stats.model.config.util.TokenResolver;
 
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -40,6 +42,8 @@ import javax.xml.bind.Unmarshaller;
 
 import junit.framework.TestCase;
 
+import org.apache.xml.serialize.OutputFormat;
+import org.apache.xml.serialize.XMLSerializer;
 import org.geotools.gce.geotiff.GeoTiffReader;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.test.TestData;
@@ -50,6 +54,10 @@ import org.opengis.referencing.datum.PixelInCell;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.SaxWriter;
+import com.thoughtworks.xstream.mapper.Mapper;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
@@ -73,10 +81,10 @@ public class TestsROI extends TestCase{
     public void testROI() throws ParseException, IOException, MismatchedDimensionException, TransformException, JAXBException{
         
         // get reference to a geotiff and wrap into geotiffReader
-        File tif = TestData.file(this, "forest_mask.tif");
+        File tif = TestData.file(this, "area.tif");
         GeoTiffReader gtr = new GeoTiffReader(tif);
         
-        // get the world to grid matrix 
+        // get the world to grid matrix  
         MathTransform g2w = gtr.getOriginalGridToWorld(PixelInCell.CELL_CORNER); //TODO Corner or Center?
         MathTransform w2g = g2w.inverse();
         
@@ -106,18 +114,43 @@ public class TestsROI extends TestCase{
         String output = new Scanner(f).useDelimiter("\\Z").next();
         StatisticConfiguration cfg = (StatisticConfiguration) unmarshaller.unmarshal(new StringReader(output));
 
+        
+        // prepare xml encoding
+        XStream xstream = new XStream() {
+                protected MapperWrapper wrapMapper(MapperWrapper next) {
+                        return new UppercaseTagMapper(next);
+                };
+        };
+        xstream.alias("StatisticConfiguration", StatisticConfiguration.class);
+  
+        // bind with the content handler
+        SaxWriter writer = new SaxWriter();
+        
+        XMLSerializer serializer = new XMLSerializer(System.out, new OutputFormat());
+        serializer.setNamespaces(true);
+        
+        writer.setContentHandler(serializer);
+
+        // write out xml
+        xstream.marshal(cfg, writer);
+        
+        
+        
         TokenResolver<StatisticConfiguration, Tokens> resolver = new TokenResolver(cfg, StatisticConfiguration.class);
 
 //        resolver.putAll(layerUpdateProperties);
         
         cfg = (StatisticConfiguration)resolver.resolve();
+        Output out = new Output();
+        out.setFile(TestData.temp(this, "outputStats.csv").getAbsolutePath());
+        cfg.setOutput(out);
 
         // initialize the file when saving statistics
         
 //        cfg.getOutput().setFile(destFileName);
-        StatsRunner runner = new StatsRunner(cfg, rgeomArr[0]);
+//        StatsRunner runner = new StatsRunner(cfg, rgeomArr[0]);
+        StatsRunner runner = new StatsRunner(cfg);
         runner.run();
-        
         
 //        File tmp = TestData.temp(this, "saved.png");
 //        ImageIO.write(imgArr[0], "png", tmp);
@@ -130,6 +163,40 @@ public class TestsROI extends TestCase{
         
     }
     
+    protected static class UppercaseTagMapper extends MapperWrapper {
+
+        public UppercaseTagMapper(Mapper wrapped) {
+            super(wrapped);
+        }
+
+        public String serializedMember(Class type, String memberName) {
+            char startChar = memberName.charAt(0);
+            if (Character.isLowerCase(startChar)) {
+                if (memberName.length() > 1) {
+                    return Character.toUpperCase(startChar) + memberName.substring(1);
+                } else {
+                    return String.valueOf(Character.toUpperCase(startChar));
+                }
+            } else {
+                return memberName;
+            }
+        }
+
+        public String realMember(Class type, String serialized) {
+            String fieldName = super.realMember(type, serialized);
+            try {
+                type.getDeclaredField(fieldName);
+                return fieldName;
+            } catch (NoSuchFieldException e) {
+                char startChar = fieldName.charAt(0);
+                if (fieldName.length() > 1) {
+                    return Character.toLowerCase(startChar) + fieldName.substring(1);
+                } else {
+                    return String.valueOf(Character.toLowerCase(startChar));
+                }
+            }
+        }
+    }
     
     
 }

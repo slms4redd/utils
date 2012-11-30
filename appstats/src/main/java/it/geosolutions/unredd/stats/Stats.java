@@ -15,7 +15,7 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
 
 /**
- * Parses CLI params, load configuration and run a StatsRunner
+ * Parses Command Line params, load configuration and run a StatsRunner
  *
  * @author ETj (etj at geo-solutions.it)
  */
@@ -28,6 +28,7 @@ public class Stats {
 
     public static void main(String[] args) {
 
+        @SuppressWarnings("static-access")
         Options options = new Options()
                 .addOption(OptionBuilder
                     .withLongOpt( "help" )

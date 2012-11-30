@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <statisticConfiguration>
-    <name>area_admin_small</name>
-    <title>Low resolution admin areas</title>
-    <description>Compute the area for the administrative areas. Low resolutions raster.</description>
+	<name>area_admin_small</name>
+	<title>Low resolution admin areas</title>
+	<description>Compute the area for the administrative areas. Low
+		resolutions raster.</description>
 
-    <topic>rdc</topic>
-    <topic>area</topic>
-    <topic>administartive</topic>
+	<topic>rdc</topic>
+	<topic>area</topic>
+	<topic>administartive</topic>
 
-    <stats>
-        <stat>SUM</stat>
-        <stat>MIN</stat>
-        <stat>MAX</stat>
-        <stat>COUNT</stat>
-    </stats>
+	<stats>
+		<stat>SUM</stat>
+		<stat>MIN</stat>
+		<stat>MAX</stat>
+		<stat>COUNT</stat>
+	</stats>
 
-    <deferredMode>false</deferredMode>
+	<deferredMode>false</deferredMode>
 
-    <dataLayer>
-        <file>D:\work\code\nfms-utils\appstats\src\test\resources\it\geosolutions\unredd\test-data\forest_mask.tif</file>
-    </dataLayer>
+	<dataLayer>
+		<file>D:\work\code\nfms-utils\appstats\src\test\resources\it\geosolutions\unredd\test-data\area.tif</file>
+	</dataLayer>
 
 
-    <classificationLayer>
-        <file>D:\work\code\nfms-utils\appstats\src\test\resources\it\geosolutions\unredd\test-data\forest_mask.tif</file>
-        <nodata>65535</nodata>
-    </classificationLayer>
 
-    <output>
-        <format>CSV</format>
-        <separator>;</separator>
-        <NaNValue>-1</NaNValue>
-    </output>
-<!--    <classifications>
-        <filename>filename2</filename>
-        <pivot>
-            <value>0.0</value>
-            <value>1.0</value>
-            <value>2.0</value>
-            <value>3.0</value>
-        </pivot>
-    </classifications>-->
+	<classificationLayer>
+		<file>D:\work\code\nfms-utils\appstats\src\test\resources\it\geosolutions\unredd\test-data\forest_mask.tif</file>
+		<pivot>
+			<value>0</value> <!-- not forest -->
+			<value>1</value> <!-- forest -->
+		</pivot>
+		<nodata>255</nodata>
+	</classificationLayer>
+
+
+	<output>
+		<format>CSV</format>
+		<separator>;</separator>
+		<NaNValue>-1</NaNValue>
+	</output>
+	<!-- <classifications> <filename>filename2</filename> <pivot> <value>0.0</value> 
+		<value>1.0</value> <value>2.0</value> <value>3.0</value> </pivot> </classifications> -->
 
 </statisticConfiguration>

@@ -42,49 +42,59 @@ import org.jaitools.media.jai.classifiedstats.Result;
 import org.jaitools.numeric.Statistic;
 
 /**
- *
+ * This Class provide an entry point for handle JAI-Tools ClassifiedStatistics given a StatisticConfiguration instance
+ *  
  * @author ETj (etj at geo-solutions.it)
+ * @author DamianoG
  */
 public class StatsRunner {
+    
     private final static Logger LOGGER = Logger.getLogger(StatsRunner.class);
-
-
+    
+    /**
+     * Hold all informations about Statistics to calculate
+     */
     private final StatisticConfiguration cfg;
+    
+    /**
+     * Region Of Interest on wich calculate the stats
+     */
     private final ROIGeometry roiGeom;
-
-    private Integer countIndex = null;
+    
+    /**
+     * The Object responsible to hold the type and the order of the statistics
+     */
     private Map<Statistic, Integer> statsIndexes = new EnumMap<Statistic, Integer>(Statistic.class);
-
+    private Integer countIndex = null;
+    
     private FileWriter outputWriter = null;
 
-//    static{
-//
-//     OperationRegistry registry = JAI.getDefaultInstance().getOperationRegistry();
-//        try
-//        {
-//            // rendered  org.jaitools.media.jai.classifiedstats.ClassifiedStatsRIF  org.jaitools.media.jai  ClassifiedStats  ClassifiedStats
-//            final OperationDescriptor op = new ClassifiedStatsDescriptor();
-//            registry.registerDescriptor(op);
-//
-//            final String descName = op.getName();
-//            final RenderedImageFactory rif = new ClassifiedStatsRIF();
-//            registry.registerFactory(RenderedRegistryMode.MODE_NAME, descName,
-//                "org.jaitools.media.jai", rif);
-//        } catch(Exception e) {
-//            LOGGER.error("Error in init: " + e.getMessage(), e);
-//        }
-//    }
-
+    /**
+     * 
+     * @param cfg a StatisticConfiguration object that hold all informations about Stats to calculate.
+     */
     public StatsRunner(StatisticConfiguration cfg) {
         this.cfg = cfg;
         this.roiGeom = null;
     }
     
+    /**
+     * 
+     * @param cfg a StatisticConfiguration object that hold all informations about Stats to calculate.
+     * @param roiGeom the Region Of Interest on wich calculate the stats
+     */
     public StatsRunner(StatisticConfiguration cfg, ROIGeometry roiGeom) {
         this.cfg = cfg;
         this.roiGeom = roiGeom;
     }
     
+    /**
+     * This method is the main entry point for Statistics Calculation. 
+     * Its purpose is to process the provided StatisticConfiguration object and instantiate and run a RasterClassifiedStatistics object 
+     * that is "StatisticConfiguration unaware". The results provided by RasterClassifiedStatistics object is stored in an output file.
+     * 
+     * @throws IOException
+     */
     public void run() throws IOException {
 
         LOGGER.info("Preparing stats...");
@@ -154,7 +164,7 @@ public class StatsRunner {
 
         Map<Integer, List<Double>> pivot = new TreeMap<Integer, List<Double>>();
 
-        if(pivotIndex == -1) { // no pivotting
+        if(pivotIndex == -1 || pivotIndex == 0) { // no pivotting
             outputStats(results);
         } else {
             LOGGER.info("Pivoting...");
