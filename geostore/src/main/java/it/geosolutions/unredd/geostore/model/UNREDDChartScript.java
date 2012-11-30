@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,7 +36,7 @@ public class UNREDDChartScript
     extends UNREDDResource<UNREDDChartScript.Attributes,
                            UNREDDChartScript.ReverseAttributes> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(UNREDDChartScript.class);
+    //private final static Logger LOGGER = LoggerFactory.getLogger(UNREDDChartScript.class);
 
     public static final String CATEGORY_NAME = UNREDDCategories.CHARTSCRIPT.getName();
 
@@ -82,5 +82,9 @@ public class UNREDDChartScript
     @Override
     public String getCategoryName() {
         return CATEGORY_NAME;
+    }
+    
+    public List<String> getStatsDefNames() {
+		return getReverseAttributes(ReverseAttributes.STATSDEF.getName());
     }
 }

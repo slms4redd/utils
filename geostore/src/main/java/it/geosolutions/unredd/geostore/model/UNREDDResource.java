@@ -25,8 +25,11 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import it.geosolutions.geostore.core.model.Attribute;
 import it.geosolutions.geostore.core.model.Resource;
+import it.geosolutions.geostore.core.model.StoredData;
 import it.geosolutions.geostore.core.model.enums.DataType;
 import it.geosolutions.geostore.services.dto.ShortAttribute;
+import it.geosolutions.geostore.services.dto.search.AttributeFilter;
+import it.geosolutions.geostore.services.dto.search.SearchOperator;
 import it.geosolutions.geostore.services.rest.model.RESTCategory;
 import it.geosolutions.geostore.services.rest.model.RESTResource;
 import java.lang.reflect.Type;
@@ -71,24 +74,36 @@ import org.slf4j.LoggerFactory;
 public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAttributeDef> {
     private final static Logger LOGGER = LoggerFactory.getLogger(UNREDDResource.class);
 
+    Long id;
+    String name;
+    String description;
+    String data;
+    
     private Map<String, String> attributes = new HashMap<String, String>();
     private Map<String, Attribute> originalAttributes = new HashMap<String, Attribute>();
 
-    private Long id;
-    
     public abstract String getCategoryName();
     protected abstract Map<String, DataType> getAttributeMap();
     protected abstract List<String> getReverseAttributes();
-    
+
     public UNREDDResource() {
     }
 
     public UNREDDResource(Resource resource) {
+
         // category sanity check
         if(! getCategoryName().equals(resource.getCategory().getName())) {
             throw new IllegalArgumentException("Bad resource category " + resource.getCategory().getName() + ": only handling " + getCategoryName());
         }
 
+        // Copy essential resource info
+        id = resource.getId();
+        name = resource.getName();
+        description = resource.getDescription();
+        if (resource.getData() != null) {
+        	data = resource.getData().getData();
+        }
+        
         // copy attribs
         if (resource.getAttribute() != null) { // SG - when there are no attributes, resource.getAttribute() returns null - can't modify resource.getAttribute()
             for (Attribute a : resource.getAttribute()) {
@@ -108,13 +123,27 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
                 attributes.put(a.getName(), a.getValue());
             }
         }
-        
+
         // TODO: copy other resource info
-        
-        this.id = resource.getId();
     }
 
-    private boolean checkAttribute(String name, String value) {
+    public Long getId() {
+		return id;
+	}
+    
+	public String getName() {
+		return name;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public String getData() {
+		return data;
+	}
+	
+	private boolean checkAttribute(String name, String value) {
         boolean direct = getAttributeMap().containsKey(name);
         boolean reverse = getReverseAttributes().contains(value);
 
@@ -231,7 +260,7 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
     }
 
     public List<ShortAttribute> createShortAttributeList() {
-        List ret = new ArrayList();
+        List<ShortAttribute> ret = new ArrayList<ShortAttribute>();
         for (String name : attributes.keySet()) {
             ret.add(createShortAttribute(name));
         }
@@ -245,6 +274,10 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
 
         RESTResource resource = new RESTResource();
         resource.setCategory(cat);
+        resource.setId(getId());
+        resource.setName(getName());
+        resource.setDescription(getDescription());
+        resource.setData(getData());
         resource.setAttribute(createShortAttributeList());
         return resource;
     }
