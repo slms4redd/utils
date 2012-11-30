@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+    http://maven.apache.org/maven-v4_0_0.xsd ">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>it.geosolutions.unredd</groupId>
+		<artifactId>unredd-utils</artifactId>
+		<version>1.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>it.geosolutions.unredd</groupId>
+	<artifactId>onlinestats</artifactId>
+	<version>1.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>UN-REDD app: Real Time Statistics</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-process</artifactId>
+		</dependency>
+		<!-- Use dependency management instead -->
+		<dependency>
+			<groupId>org.geoserver.extension</groupId>
+		    <artifactId>wps-core</artifactId>
+		    <version>2.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mockrunner</groupId>
+			<artifactId>mockrunner</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>it.geosolutions.unredd</groupId>
+			<artifactId>teststats</artifactId>
+			<version>1.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>opengeo</id>
+			<name>opengeo</name>
+			<url>http://repo.opengeo.org</url>
+		</repository>
+	</repositories>
+
+</project>

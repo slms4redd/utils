@@ -15,7 +15,6 @@
     <name>UN-REDD app: Stats</name>
 
     <dependencies>
-
         <!-- =========================================================== -->
         <!-- GeoTools -->
         <!-- =========================================================== -->
@@ -43,17 +42,14 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-geotiff</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-epsg-hsql</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-sample-data</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <!-- =========================================================== -->
@@ -96,7 +92,16 @@
         <dependency>
             <groupId>javax.media</groupId>
             <artifactId>jai_core</artifactId>
-        </dependency>         
+        </dependency>
+        <dependency>
+		   <groupId>junit</groupId>
+		   <artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.3.1</version>
+		</dependency>
     </dependencies>
 
 

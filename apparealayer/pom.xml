@@ -52,7 +52,11 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-epsg-hsql</artifactId>
-        </dependency>        
+        </dependency>
+        <dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		</dependency>        
     </dependencies>
 
     <build>
