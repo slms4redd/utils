@@ -25,7 +25,7 @@ import com.vividsolutions.jts.geom.Geometry;
  * @author DamianoG
  * 
  */
-@DescribeProcess(title = "OnlineStatsWPS", description = "Hello WPS Sample")
+@DescribeProcess(title = "OnlineStatsWPS", description = "A services that expose the RasterClassificationStatistics")
 public class OnlineStatsWPS implements GSProcess {
 
     private final static Logger LOGGER = Logger.getLogger(StatsRunner.class);

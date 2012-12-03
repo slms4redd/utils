@@ -3,7 +3,7 @@
 
 <beans>
 	<!-- The WPS services endpoint -->	
-	<bean id="realtimeStatsWPS" class="it.geosolutions.unredd.onlinestats.RealtimeStatsWPS"/>
+	<bean id="OnlineStatsWPS" class="it.geosolutions.unredd.onlinestats.OnlineStatsWPS"/>
 	<!-- The PPIO for the Statistic Configuration Bean -->
 	<bean id="statisticConfigurationPPIO" class="it.geosolutions.unredd.onlinestats.ppio.StatisticConfigurationPPIO"/>
 </beans>
