@@ -19,13 +19,13 @@
 	<deferredMode>false</deferredMode>
 
 	<dataLayer>
-		<file>D:\work\code\nfms-utils\appstats\src\test\resources\it\geosolutions\unredd\test-data\area.tif</file>
+		<file>${PLACE YOUR TIFF FILE ABSOLUTE PATH HERE}</file>
 	</dataLayer>
 
 
 
 	<classificationLayer>
-		<file>D:\work\code\nfms-utils\appstats\src\test\resources\it\geosolutions\unredd\test-data\forest_mask.tif</file>
+		<file>${PLACE YOUR TIFF FILE ABSOLUTE PATH HERE}</file>
 		<pivot>
 			<value>0</value> <!-- not forest -->
 			<value>1</value> <!-- forest -->
