@@ -42,13 +42,11 @@
         </license>
     </licenses>
 
-
     <dependencies>
 
         <!-- =========================================================== -->
         <!-- GeoStore -->
         <!-- =========================================================== -->
-
         <dependency>
             <groupId>it.geosolutions.geostore</groupId>
             <artifactId>geostore-model</artifactId>
@@ -69,7 +67,6 @@
         <!-- =========================================================== -->
         <!-- JSON -->
         <!-- =========================================================== -->
-        
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -78,7 +75,8 @@
         </dependency>
         
         <!-- =========================================================== -->
-
+        <!-- Log4J -->
+        <!-- =========================================================== -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -93,6 +91,14 @@
             <artifactId>slf4j-log4j12</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- =========================================================== -->
+        <!-- JUnit -->
+        <!-- =========================================================== -->        
+		<dependency>
+		   <groupId>junit</groupId>
+		   <artifactId>junit</artifactId>
+		</dependency>
         
     </dependencies>
 </project>

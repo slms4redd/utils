@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,7 +36,7 @@ public class UNREDDLayerUpdate
     extends UNREDDResource<UNREDDLayerUpdate.Attributes,
                            UNREDDLayerUpdate.ReverseAttributes> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(UNREDDLayerUpdate.class);
+    //private final static Logger LOGGER = LoggerFactory.getLogger(UNREDDLayerUpdate.class);
 
     private static final String CATEGORY_NAME = UNREDDCategories.LAYERUPDATE.getName();
 
@@ -97,5 +97,26 @@ public class UNREDDLayerUpdate
     @Override
     public String getCategoryName() {
         return CATEGORY_NAME;
+    }
+    
+    public String getDateAsString() {
+        String year  = getAttribute(Attributes.YEAR);
+        String month = getAttribute(Attributes.MONTH);
+        String day = getAttribute(Attributes.DAY);
+                
+        // build date string
+        String date = year;        
+        if (month != null) {
+        	date += "-";
+            if (month.length() == 1) date += "0";
+            date += month;
+            if (day != null) {
+            	date += "-";
+                if (day.length() == 1) date += "0";
+                date += day;
+            }
+        }
+        
+        return date;
     }
 }
