@@ -1,21 +1,19 @@
 /*
- *  GeoBatch - Open Source geospatial batch processing system
- *  https://github.com/nfms4redd/nfms-geobatch
- *  Copyright (C) 2007-2012 GeoSolutions S.A.S.
+ *  Copyright (C) 2007 - 2012 GeoSolutions S.A.S.
  *  http://www.geo-solutions.it
- *
+ * 
  *  GPLv3 + Classpath exception
- *
+ * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *
+ * 
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *
+ * 
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -52,45 +50,40 @@ public class ROIGeometryBuilder {
      * @return A Region Of Interest (as ROIGeometry object) reprojected into the raster space of the Layer specified into StatisticConfiguration
      * @throws Exception
      */
-    public static ROIGeometry build(StatisticConfiguration conf, Geometry worldGeom) throws Exception {
+    public static ROIGeometry build(StatisticConfiguration conf, Geometry worldGeom)
+            throws Exception {
 
-        //TODO the CRS of worldGeom must be equals to the dataLayer specified into conf object. ADD A CONTROL. 
-        
         // get the reference to the target geotiff then did the reprojection into raster space
         File f = new File(conf.getDataLayer().getFile());
         ROIGeometry roiGeom = null;
-        try {
-            roiGeom = build(f, worldGeom);
-        } catch (MismatchedDimensionException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new Exception(e.getMessage(), e.getCause());
-        } catch (DataSourceException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new Exception(e.getMessage(), e.getCause());
-        } catch (TransformException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new Exception(e.getMessage(), e.getCause());
-        }
+        roiGeom = build(f, worldGeom);
 
         return roiGeom;
     }
 
-    private static ROIGeometry build(File geoTiffFile, Geometry worldGeom) throws DataSourceException,
-            MismatchedDimensionException, TransformException {
+    private static ROIGeometry build(File geoTiffFile, Geometry worldGeom) throws Exception {
 
-        // wrap tiff into geotiffReader
-        GeoTiffReader gtr = new GeoTiffReader(geoTiffFile);
+        GeoTiffReader gtr = null;
+        try {
+            // wrap tiff into geotiffReader
+            gtr = new GeoTiffReader(geoTiffFile);
 
-        // get the world to grid matrix
-        MathTransform g2w = gtr.getOriginalGridToWorld(PixelInCell.CELL_CORNER); // TODO Corner or Center? Are you Sure?
-        MathTransform w2g = g2w.inverse();
+            // get the world to grid matrix
+            MathTransform g2w = gtr.getOriginalGridToWorld(PixelInCell.CELL_CORNER);
+            MathTransform w2g = g2w.inverse();
 
-        // Translate the geometry from Model space to Raster space
-        Geometry reprojectedGeom = JTS.transform(worldGeom, w2g);
+            // Translate the geometry from Model space to Raster space
+            Geometry reprojectedGeom = JTS.transform(worldGeom, w2g);
+            return new ROIGeometry(reprojectedGeom);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new Exception(e.getMessage(), e.getCause());
+        } finally {
+            if (gtr != null) {
+                gtr.dispose();
+            }
 
-        gtr.dispose();
-
-        return new ROIGeometry(reprojectedGeom);
+        }
     }
 
 }
