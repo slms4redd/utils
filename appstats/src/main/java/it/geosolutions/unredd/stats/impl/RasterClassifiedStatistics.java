@@ -60,9 +60,6 @@ public class RasterClassifiedStatistics {
         try {
             Registry.registerRIF(JAI.getDefaultInstance(), new ClassifiedStatsDescriptor(),
                     new ClassifiedStatsRIF(), Registry.JAI_TOOLS_PRODUCT);
-            TileCache jaiCache = JAI.getDefaultInstance().getTileCache();
-            jaiCache.setMemoryCapacity((long) (1024 * 1024 * 1024)); // TODO
-            JAI.getDefaultInstance().setTileCache(jaiCache);
 
         } catch (Throwable e) {
             // swallow exception in case the op has already been registered.
