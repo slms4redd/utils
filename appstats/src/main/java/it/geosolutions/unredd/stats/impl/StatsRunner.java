@@ -57,7 +57,7 @@ public class StatsRunner {
     private final StatisticConfiguration cfg;
     
     /**
-     * Region Of Interest on wich calculate the stats
+     * Region Of Interest on which calculate the stats
      */
     private final ROIGeometry roiGeom;
     
