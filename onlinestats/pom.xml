@@ -13,7 +13,7 @@
 	<artifactId>onlinestats</artifactId>
 	<version>1.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>UN-REDD app: Real Time Statistics</name>
+	<name>UN-REDD app: Online Statistics</name>
 
 	<dependencies>
 		<dependency>
@@ -24,36 +24,20 @@
 			<groupId>it.geosolutions.unredd</groupId>
 			<artifactId>teststats</artifactId>
 		</dependency>
-
-		<!-- test dependencies -->
-		
-		<!-- Added new version for xercesImpl (and excluded older) due to version 2.4 don't implement some method needed for running test of onlinestats -->
 		<dependency>
 			<groupId>xerces</groupId>
 			<artifactId>xercesImpl</artifactId>
-			<version>2.10.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-process</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>xerces</groupId>
-					<artifactId>xercesImpl</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-coverage</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>xerces</groupId>
-					<artifactId>xercesImpl</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		
+		<!-- test dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
