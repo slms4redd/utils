@@ -20,11 +20,11 @@
 package it.geosolutions.unredd.onlinestats;
 
 import it.geosolutions.unredd.stats.impl.StatsRunner;
+import it.geosolutions.unredd.stats.model.config.Output;
 import it.geosolutions.unredd.stats.model.config.StatisticConfiguration;
 import it.geosolutions.unredd.stats.model.config.util.ROIGeometryBuilder;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
@@ -49,10 +49,16 @@ public class OnlineStatsWPS implements GSProcess {
 
     private final static Logger LOGGER = Logger.getLogger(StatsRunner.class);
 
-    @DescribeResult(name = "result", description = "a String representing Statistics in a csv format")
+    @DescribeResult(name = "result", description = "a String representing Statistics in csv format. If an error is occurred a string starting with 'internal_server_error' is returned")
     public String execute(
             @DescribeParameter(name = "geometry", description = "Geometry representing a Region Of Interest.") Geometry roi,
             @DescribeParameter(name = "statConf", description = "An object represent the Statistic definition.") StatisticConfiguration statConf) {
+
+        // Validate input parameter
+        if (roi == null || roi.isEmpty() || statConf == null) {
+            LOGGER.error("one or more input parameter are null or empty");
+            return OUTPUT_RESULT.internal_server_error.toString();
+        }
 
         String result = "";
         try {
@@ -61,6 +67,10 @@ public class OnlineStatsWPS implements GSProcess {
             ROIGeometry roiGeom = ROIGeometryBuilder.build(statConf, roi);
             // Instantiate a Stats runner with ROI using the appropriate constructor
             StatsRunner runner = new StatsRunner(statConf, roiGeom);
+            // If the output file path inside statsConf is null, add a temp file path... Remember: the stats engine store the output only on filesystem.
+            if(!outputFileExist(statConf)){
+                addOutputFile(statConf);
+            }
             // Launch the stasts Calculation
             if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("Starting Statistic calculation...");
@@ -69,24 +79,47 @@ public class OnlineStatsWPS implements GSProcess {
             runner.run();
             if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("Statistic calculation end with no error in"
-                        + (System.currentTimeMillis() - startTime)*1000 + "seconds");
+                        + (System.currentTimeMillis() - startTime) * 1000 + "seconds");
             }
-
+            // sure that statConf.getOutput().getFile() doesn't return NULL due to previous checks
+            String outputPath = statConf.getOutput().getFile();
+            result = FileUtils.readFileToString(new File(outputPath));
         } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
             result = OUTPUT_RESULT.internal_server_error.toString();
         }
-
-        String outputPath = statConf.getOutput().getFile();
-        try {
-            result = FileUtils.readFileToString(new File(outputPath));
-        } catch (FileNotFoundException e) {
-            LOGGER.error(e.getMessage(), e);
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-
         return result;
 
+    }
+    
+    /**
+     * Check if inside a not null StatisticConfiguration is specified the output file
+     * @param statConf
+     * @return true if is specified, false otherwise
+     */
+    private boolean outputFileExist(StatisticConfiguration statConf){
+        if (statConf.getOutput()==null){
+            return false;
+        }else if(statConf.getOutput().getFile()==null || statConf.getOutput().getFile().isEmpty()){
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Add the output file to a provided not null StatisticConfiguration instance
+     * @param statConf 
+     * @throws IOException if the tmp file creation isn't done
+     */
+    private void addOutputFile(StatisticConfiguration statConf) throws IOException{
+        File tmp = File.createTempFile("nfmsWPS", ".stats");
+        if (statConf.getOutput()==null){
+            Output out = new Output();
+            statConf.setOutput(out);
+            out.setFormat("CSV");
+            out.setSeparator(";");
+        }
+        statConf.getOutput().setFile(tmp.getAbsolutePath());
     }
 
     private enum OUTPUT_RESULT {
