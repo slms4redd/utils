@@ -19,10 +19,13 @@
  */
 package it.geosolutions.unredd.onlinestats.ppio;
 
+import it.geosolutions.unredd.stats.model.config.ClassificationLayer;
 import it.geosolutions.unredd.stats.model.config.StatisticConfiguration;
+import it.geosolutions.unredd.stats.model.config.StatsType;
+
 import org.geoserver.wps.ppio.XStreamPPIO;
+
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
  * A PPIO used to generate good looking xml for the StatisticConfiguration used in unredd stats
@@ -38,12 +41,10 @@ public class StatisticConfigurationPPIO extends XStreamPPIO {
 
     @Override
     protected XStream buildXStream() {
-        XStream xstream = new XStream() {
-            protected MapperWrapper wrapMapper(MapperWrapper next) {
-                return new UppercaseTagMapper(next);
-            };
-        };
-        xstream.alias("StatisticConfiguration", StatisticConfiguration.class);
+        XStream xstream = new XStream();
+        xstream.alias("stat", StatsType.class);
+        xstream.alias("statisticConfiguration", StatisticConfiguration.class);
+        xstream.alias("classificationLayer", ClassificationLayer.class);
         return xstream;
     }
 
