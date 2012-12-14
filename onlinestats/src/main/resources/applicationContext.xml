@@ -4,6 +4,8 @@
 <beans>
 	<!-- The WPS services endpoint -->	
 	<bean id="OnlineStatsWPS" class="it.geosolutions.unredd.onlinestats.OnlineStatsWPS"/>
-	<!-- The PPIO for the Statistic Configuration Bean -->
-	<bean id="statisticConfigurationPPIO" class="it.geosolutions.unredd.onlinestats.ppio.StatisticConfigurationPPIO"/>
+	<!-- The PPIO for the Statistic Configuration Bean implemented with JAXB -->
+	<!-- <bean id="statisticConfigurationPPIO" class="it.geosolutions.unredd.onlinestats.ppio.StatisticConfigurationPPIO"/> -->
+	<!-- The PPIO for the Statistic Configuration Bean implemented with JAXB-->
+	<bean id="statisticConfigurationPPIO" class="it.geosolutions.unredd.onlinestats.ppio.JAXBStatisticConfigurationPPIO"/>
 </beans>
