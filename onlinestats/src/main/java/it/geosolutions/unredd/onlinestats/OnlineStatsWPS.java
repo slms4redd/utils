@@ -19,13 +19,17 @@
  */
 package it.geosolutions.unredd.onlinestats;
 
+import static it.geosolutions.unredd.onlinestats.OnlineStatsWPSUtils.addOutputFile;
+import static it.geosolutions.unredd.onlinestats.OnlineStatsWPSUtils.checkReferencedResources;
+import static it.geosolutions.unredd.onlinestats.OnlineStatsWPSUtils.createOutputMsg;
+import static it.geosolutions.unredd.onlinestats.OnlineStatsWPSUtils.outputFileExist;
+import static it.geosolutions.unredd.onlinestats.OnlineStatsWPSUtils.validateInput;
+import it.geosolutions.unredd.onlinestats.OnlineStatsWPSUtils.OUTPUT_RESULT;
 import it.geosolutions.unredd.stats.impl.StatsRunner;
-import it.geosolutions.unredd.stats.model.config.Output;
 import it.geosolutions.unredd.stats.model.config.StatisticConfiguration;
 import it.geosolutions.unredd.stats.model.config.util.ROIGeometryBuilder;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -36,10 +40,10 @@ import org.geotools.process.gs.GSProcess;
 import org.jaitools.imageutils.ROIGeometry;
 
 import com.vividsolutions.jts.geom.Geometry;
-
 /**
  * This WPS Process wraps The UN-REDD stat engine in order to Implement the online statistic calculation. With this feature an user of the portal is
- * able to select a custom Area on the portal client and request the stats calculation.
+ * able to select a custom Area on the portal client and request the stats calculation. 
+ * This class uses the static utility methods of OnlineStatsWPSUtils class.
  * 
  * @author DamianoG
  * 
@@ -47,17 +51,19 @@ import com.vividsolutions.jts.geom.Geometry;
 @DescribeProcess(title = "OnlineStatsWPS", description = "A services that expose the RasterClassificationStatistics")
 public class OnlineStatsWPS implements GSProcess {
 
-    private final static Logger LOGGER = Logger.getLogger(StatsRunner.class);
+    private final static Logger LOGGER = Logger.getLogger(OnlineStatsWPSUtils.class);
 
     @DescribeResult(name = "result", description = "a String representing Statistics in csv format. If an error is occurred a string starting with 'internal_server_error' is returned")
     public String execute(
             @DescribeParameter(name = "geometry", description = "Geometry representing a Region Of Interest.") Geometry roi,
             @DescribeParameter(name = "statConf", description = "An object represent the Statistic definition.") StatisticConfiguration statConf) {
 
-        // Validate input parameter
-        if (roi == null || roi.isEmpty() || statConf == null) {
-            LOGGER.error("one or more input parameter are null or empty");
-            return OUTPUT_RESULT.internal_server_error.toString();
+        String resultDescription = "";
+        if(!validateInput(roi, statConf, resultDescription)){
+            return createOutputMsg(OUTPUT_RESULT.internal_server_error, resultDescription);
+        }
+        if(!checkReferencedResources(statConf, resultDescription)){
+            return createOutputMsg(OUTPUT_RESULT.resource_not_found, resultDescription);
         }
 
         String result = "";
@@ -86,43 +92,9 @@ public class OnlineStatsWPS implements GSProcess {
             result = FileUtils.readFileToString(new File(outputPath));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            result = OUTPUT_RESULT.internal_server_error.toString();
+            result = createOutputMsg(OUTPUT_RESULT.internal_server_error, e.getMessage());
         }
         return result;
 
-    }
-    
-    /**
-     * Check if inside a not null StatisticConfiguration is specified the output file
-     * @param statConf
-     * @return true if is specified, false otherwise
-     */
-    private boolean outputFileExist(StatisticConfiguration statConf){
-        if (statConf.getOutput()==null){
-            return false;
-        }else if(statConf.getOutput().getFile()==null || statConf.getOutput().getFile().isEmpty()){
-            return false;
-        }
-        return true;
-    }
-    
-    /**
-     * Add the output file to a provided not null StatisticConfiguration instance
-     * @param statConf 
-     * @throws IOException if the tmp file creation isn't done
-     */
-    private void addOutputFile(StatisticConfiguration statConf) throws IOException{
-        File tmp = File.createTempFile("nfmsWPS", ".stats");
-        if (statConf.getOutput()==null){
-            Output out = new Output();
-            statConf.setOutput(out);
-            out.setFormat("CSV");
-            out.setSeparator(";");
-        }
-        statConf.getOutput().setFile(tmp.getAbsolutePath());
-    }
-
-    private enum OUTPUT_RESULT {
-        internal_server_error, result_linked
     }
 }
