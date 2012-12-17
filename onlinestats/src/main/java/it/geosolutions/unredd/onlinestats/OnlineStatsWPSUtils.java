@@ -45,14 +45,14 @@ public class OnlineStatsWPSUtils {
      * 
      * @param roi
      * @param statConf
-     * @param resultDescription
+     * @param resultDescription if an error is occurred, a message will be store here
      * @return True if the input provided to the service are not null and not empty
      */
     public static boolean validateInput(Geometry roi, StatisticConfiguration statConf,
-            String resultDescription) {
+            StringBuilder resultDescription) {
         // Validate input parameter
         if (roi == null || roi.isEmpty() || statConf == null) {
-            resultDescription = "one or more input parameter are null or empty";
+            resultDescription.append("one or more input parameter are null or empty");
             LOGGER.error(resultDescription);
             return false;
         }
@@ -63,31 +63,32 @@ public class OnlineStatsWPSUtils {
      * Check if the files referenced into a StatisticConfiguration object exists or not
      * 
      * @param statConf
-     * @param resultDescription
+     * @param resultDescription if an error is occurred, a message will be store here
      * @return true if all referenced resources exist, false otherwise
      */
     public static boolean checkReferencedResources(StatisticConfiguration statConf,
-            String resultDescription) {
+            StringBuilder resultDescription) {
         if (!(statConf.getDataLayer() != null && statConf.getDataLayer().getFile() != null)) {
-            resultDescription = "The DataLayer file is not specified in StatisticConfiguration";
+            resultDescription
+                    .append("The DataLayer file is not specified in StatisticConfiguration");
             LOGGER.error(resultDescription);
             return false;
         } else if (!new File(statConf.getDataLayer().getFile()).exists()) {
-            resultDescription = "The DataLayer file [" + statConf.getDataLayer().getFile()
-                    + "] specified in StatisticConfiguration doesn't exist";
+            resultDescription.append("The DataLayer file [" + statConf.getDataLayer().getFile()
+                    + "] specified in StatisticConfiguration doesn't exist");
             LOGGER.error(resultDescription);
             return false;
         } else {
             if (statConf.getClassifications() == null || statConf.getClassifications().isEmpty()) {
-                resultDescription = "You don't have provide any Classification Layer";
+                resultDescription.append("You don't have provide any Classification Layer");
                 LOGGER.error(resultDescription);
                 return false;
             }
             for (int i = 0; i < statConf.getClassifications().size(); i++) {
                 if (!new File(statConf.getClassifications().get(i).getFile()).exists()) {
-                    resultDescription = "The ClassificationLayer file ["
+                    resultDescription.append("The ClassificationLayer file ["
                             + statConf.getClassifications().get(i).getFile()
-                            + "] specified in StatisticConfiguration doesn't exist";
+                            + "] specified in StatisticConfiguration doesn't exist");
                     LOGGER.error(resultDescription);
                     return false;
                 }
@@ -103,7 +104,7 @@ public class OnlineStatsWPSUtils {
      * @param msg
      * @return the message
      */
-    public static String createOutputMsg(OUTPUT_RESULT value, String msg) {
+    public static String createOutputMsg(OUTPUT_RESULT value, StringBuilder msg) {
         StringBuilder builder = new StringBuilder();
         builder.append(value);
         builder.append(" - ");

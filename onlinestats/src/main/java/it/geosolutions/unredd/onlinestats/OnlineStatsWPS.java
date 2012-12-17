@@ -58,10 +58,11 @@ public class OnlineStatsWPS implements GSProcess {
             @DescribeParameter(name = "geometry", description = "Geometry representing a Region Of Interest.") Geometry roi,
             @DescribeParameter(name = "statConf", description = "An object represent the Statistic definition.") StatisticConfiguration statConf) {
 
-        String resultDescription = "";
+        StringBuilder resultDescription = new StringBuilder();
         if(!validateInput(roi, statConf, resultDescription)){
             return createOutputMsg(OUTPUT_RESULT.internal_server_error, resultDescription);
         }
+        resultDescription = new StringBuilder();
         if(!checkReferencedResources(statConf, resultDescription)){
             return createOutputMsg(OUTPUT_RESULT.resource_not_found, resultDescription);
         }
@@ -92,7 +93,7 @@ public class OnlineStatsWPS implements GSProcess {
             result = FileUtils.readFileToString(new File(outputPath));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            result = createOutputMsg(OUTPUT_RESULT.internal_server_error, e.getMessage());
+            result = createOutputMsg(OUTPUT_RESULT.internal_server_error, new StringBuilder().append(e.getMessage()));
         }
         return result;
 
