@@ -36,6 +36,11 @@
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-coverage</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.3</version>
+		</dependency>
 		
 		<!-- test dependencies -->
 		<dependency>

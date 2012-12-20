@@ -21,12 +21,23 @@
  */
 package it.geosolutions.unredd.onlinestats.ppio;
 
+import it.geosolutions.unredd.stats.model.config.ClassificationLayer;
 import it.geosolutions.unredd.stats.model.config.StatisticConfiguration;
 
+import java.beans.PropertyDescriptor;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtilsBean;
 
 /**
  * The PPIO for The StatisticConfiguration object implemented using JAXB
@@ -37,28 +48,94 @@ import javax.xml.bind.Unmarshaller;
 public class JAXBStatisticConfigurationPPIO extends JAXBPPIO {
 
     public JAXBStatisticConfigurationPPIO() {
-        super(StatisticConfiguration.class);
+        this(StatisticConfiguration.class, "text/xml", new QName("http://nfms4redd.org/statistics", "statisticConfiguration", ""));
     }
 
-    @Override
-    public Object decode(Object input) throws Exception {
-        StringReader sr = null;
-        try {
-            Unmarshaller unmarshaller = buildUnmarshaller();
-            sr = new StringReader((String) input);
-            StatisticConfiguration cfg = (StatisticConfiguration) unmarshaller.unmarshal(sr);
-            return cfg;
-        } finally {
-            if (sr != null) {
-                sr.close();
-            }
-        }
-    }
+    protected JAXBStatisticConfigurationPPIO(Class type, String mimeType, QName element) {
+		super(type, mimeType, element);
+	}
 
-    @Override
-    public Object decode(InputStream arg0) throws Exception {
+    public StatisticConfiguration decode(InputStream arg0) throws Exception {
         Unmarshaller unmarshaller = buildUnmarshaller();
         StatisticConfiguration cfg = (StatisticConfiguration) unmarshaller.unmarshal(arg0);
         return cfg;
     }
+    
+	public StatisticConfiguration decode(Object input) throws Exception {
+    	if (input instanceof String) {
+    		return decodeString((String)input);
+    	} else if(input instanceof Map<?, ?>) {
+    		return decodeMap((Map<?, ?>)input);
+    	} else {
+    		return (StatisticConfiguration)super.decode(input);
+    	}
+    }
+    
+    StatisticConfiguration decodeString(String input) throws Exception {
+    	InputStream is = new ByteArrayInputStream(input.getBytes());
+        return(decode(is));
+    }
+	
+    
+    StatisticConfiguration decodeMap(Map<?, ?> input) throws Exception {
+    	StatisticConfiguration statConf = new StatisticConfiguration();
+    	/*
+    	 *  The "dump" will show the Map structure in console.
+    	 *  The "populate" would try to build StatConf using introspection, but some bits are missing, so hot fully possible.
+    	 *  Third option would be writing a code that traverses all the tree structure instantiating the needed fields. Which is painful and not very elegant.
+    	 */
+    	//dump(input);
+    	//statConf = (StatisticConfiguration)populate(input, StatisticConfiguration.class);
+        
+    	throw new Exception("Decoding from pre-parsed Object is not implemented.");
+        //return statConf;
+    }
+    
+    private void dump(Map<?, ?> input) {
+    	for(Entry<?, ?> e : input.entrySet()) {
+    		Class<?> c = e.getValue().getClass();
+    		if (Map.class.isAssignableFrom(c)) {
+    			System.out.println(e.getKey() + ":");
+    			dump((Map<?, ?>)e.getValue());
+    		} else {
+    			System.out.println(e.getKey() + ": (" + c.getSimpleName() + ") " + e.getValue());
+    		}
+    	}
+    }
+    
+    private Object populate(Map m, Class c) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    	Object o = c.newInstance();
+      	for(Object eo : m.entrySet()) {
+    		Entry e = (Entry)eo;
+    		Object v = e.getValue();
+    		Class<?> ec = v.getClass();
+    		if (Map.class.isAssignableFrom(ec)) {
+    			PropertyUtilsBean pub = new PropertyUtilsBean();
+    			String ek = (String)e.getKey();
+    			PropertyDescriptor pd = pub.getPropertyDescriptor(o, ek);
+    			Class pt = pd.getPropertyType();
+    			if(List.class.isAssignableFrom(pt)) {
+    				Class k = Object.class;
+    				if (ek.equals("classifications")) {
+    					k = ClassificationLayer.class;
+    				//} else if (ek.equals("topics")) {
+    				//	k = String.class;
+    				//} else if (ek.equals("stats")) {
+    				//	k = StatsType.class;
+    				}
+    				List l = new ArrayList();
+    				// This is the point where I give up.
+    				Object ojeto = populate((Map)e.getValue(), k);
+    				l.add(ojeto);
+    				m.put(ek, l);
+    			} else {
+    				Object p = populate((Map)e.getValue(), pt);
+    				m.put(ek, p);
+    			}
+    		}
+    	}
+    	BeanUtils.populate(o, m);
+    	return o;
+    }
+
 }

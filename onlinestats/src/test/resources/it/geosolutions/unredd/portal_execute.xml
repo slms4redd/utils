@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Execute service="WPS" version="1.0.0" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:ns="http://www.opengis.net/ows/1.1">
+  <ns:Identifier>gs:OnlineStatsWPS</ns:Identifier>
+  <DataInputs>
+    <Input>
+      <ns:Identifier>geometry</ns:Identifier>
+      <Data>
+        <ComplexData schema="http://schemas.opengis.net/gml/3.1.1/base/geometryBasic2d.xsd" mimeType="text/xml; subtype=gml/3.1.1" encoding="UTF-8">
+          <gml:Polygon xmlns:sch="http://www.ascc.net/xml/schematron" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <gml:exterior>
+              <gml:LinearRing>
+                <gml:posList>21.073607809505024 -2.6035981542402555 24.105834371884185 -1.4617579288653582 24.765014059357643 -3.3496552215281192 21.996459371968403 -4.3580986905562 21.073607809505024 -2.6035981542402555</gml:posList>
+              </gml:LinearRing>
+            </gml:exterior>
+          </gml:Polygon>
+        </ComplexData>
+      </Data>
+    </Input>
+    <Input>
+      <ns:Identifier>statConf</ns:Identifier>
+      <Data>
+        <ComplexData mimeType="text/xml" encoding="UTF-8">
+          <statisticConfiguration xmlns="http://nfms4redd.org/statistics">
+            <name>forest_mask_stats</name>
+            <title>Forest change in regions</title>
+            <description>Compute the forest and not forest area for the administrative areas</description>
+            <topic>DRC</topic>
+            <topic>area</topic>
+            <topic>regions</topic>
+            <topic>forest mask</topic>
+            <stats>
+              <stat>SUM</stat>
+            </stats>
+            <deferredMode>true</deferredMode>
+            <dataLayer>
+              <file>/var/geobatch/stats_layers/area.tif</file>
+            </dataLayer>
+            <classificationLayer zonal="true">
+              <file>/var/geobatch/stats_layers/provinces.tif</file>
+              <nodata>255.0</nodata>
+            </classificationLayer>
+            <classificationLayer zonal="false">
+              <file>{FILEPATH}</file>
+              <nodata>255.0</nodata>
+              <pivot>
+                <value>0.0</value>
+                <value>1.0</value>
+              </pivot>
+            </classificationLayer>
+            <output>
+              <format>CSV</format>
+              <missingValue>0</missingValue>
+              <nanValue>NaN</nanValue>
+              <separator>;</separator>
+            </output>
+          </statisticConfiguration>
+        </ComplexData>
+      </Data>
+    </Input>
+  </DataInputs>
+</Execute>
