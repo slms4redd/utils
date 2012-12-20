@@ -48,12 +48,8 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 public class JAXBStatisticConfigurationPPIO extends JAXBPPIO {
 
     public JAXBStatisticConfigurationPPIO() {
-        this(StatisticConfiguration.class, "text/xml", new QName("http://nfms4redd.org/statistics", "statisticConfiguration", ""));
+        super(StatisticConfiguration.class);
     }
-
-    protected JAXBStatisticConfigurationPPIO(Class type, String mimeType, QName element) {
-		super(type, mimeType, element);
-	}
 
     public StatisticConfiguration decode(InputStream arg0) throws Exception {
         Unmarshaller unmarshaller = buildUnmarshaller();
