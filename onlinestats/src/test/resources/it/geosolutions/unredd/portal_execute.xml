@@ -19,43 +19,13 @@
     <Input>
       <ns:Identifier>statConf</ns:Identifier>
       <Data>
-        <ComplexData mimeType="text/xml" encoding="UTF-8">
-          <statisticConfiguration xmlns="http://nfms4redd.org/statistics">
-            <name>forest_mask_stats</name>
-            <title>Forest change in regions</title>
-            <description>Compute the forest and not forest area for the administrative areas</description>
-            <topic>DRC</topic>
-            <topic>area</topic>
-            <topic>regions</topic>
-            <topic>forest mask</topic>
-            <stats>
-              <stat>SUM</stat>
-            </stats>
-            <deferredMode>true</deferredMode>
-            <dataLayer>
-              <file>/var/geobatch/stats_layers/area.tif</file>
-            </dataLayer>
-            <classificationLayer zonal="true">
-              <file>/var/geobatch/stats_layers/provinces.tif</file>
-              <nodata>255.0</nodata>
-            </classificationLayer>
-            <classificationLayer zonal="false">
-              <file>{FILEPATH}</file>
-              <nodata>255.0</nodata>
-              <pivot>
-                <value>0.0</value>
-                <value>1.0</value>
-              </pivot>
-            </classificationLayer>
-            <output>
-              <format>CSV</format>
-              <missingValue>0</missingValue>
-              <nanValue>NaN</nanValue>
-              <separator>;</separator>
-            </output>
-          </statisticConfiguration>
-        </ComplexData>
+        <ComplexData mimeType="text/xml" encoding="CDATA"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes"?><statisticConfiguration><name>forest_mask_stats</name><title>Forest change in regions</title><description>Compute the forest and not forest area for the administrative areas</description><topic>DRC</topic><topic>area</topic><topic>regions</topic><topic>forest mask</topic><stats><stat>SUM</stat></stats><deferredMode>true</deferredMode><dataLayer><file>{AREA}</file></dataLayer><classificationLayer zonal="true"><file>{PROVINCES}</file><nodata>255.0</nodata></classificationLayer><classificationLayer zonal="false"><file>{FOREST_MASK}</file><nodata>255.0</nodata><pivot><value>0.0</value><value>1.0</value></pivot></classificationLayer><output><format>CSV</format><missingValue>0</missingValue><nanValue>NaN</nanValue><separator>;</separator></output></statisticConfiguration>]]></ComplexData>
       </Data>
     </Input>
   </DataInputs>
+  <ResponseForm>
+    <RawDataOutput mimeType="text/xml" encoding="UTF-8">
+      <ows:Identifier xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">result</ows:Identifier>
+    </RawDataOutput>
+  </ResponseForm>
 </Execute>
