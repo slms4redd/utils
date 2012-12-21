@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- =======================================================================    
-        Maven Project Configuration File                                        
-                                                                                
-        GeoSolutions GeoBatch Project                                                    
+<!-- =======================================================================
+        Maven Project Configuration File
+
+        GeoSolutions GeoBatch Project
             http://geobatch.codehaus.org
-                                                                                            
-        Version: $Id: pom.xml 329 2011-06-14 13:00:49Z ccancellieri $              
-     ======================================================================= -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+======================================================================= -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-  <!-- =========================================================== -->
-  <!--     Module Description                                      -->
-  <!-- =========================================================== -->
+    <!-- =========================================================== -->
+    <!--     Module Description                                      -->
+    <!-- =========================================================== -->
     <groupId>it.geosolutions.unredd</groupId>
     <artifactId>unredd-utils</artifactId>
     <version>1.1-SNAPSHOT</version>
@@ -20,13 +21,14 @@
 
     <name>UN-REDD utils: root</name>
     <description>UNREDD util libraries - Root module</description>
-<!--     <url>http://www.geo-solutions.it/maven_reports/gb/</url> -->
-  
-<!--    <scm>
-        <connection>scm:svn:http://svn.geotools.org/geotools/trunk/gt/modules/</connection>
-        <url>http://svn.geotools.org/geotools/trunk/gt/modules/</url>
-    </scm>
--->  
+
+    <url>https://github.com/nfms4redd/nfms-utils</url>
+
+    <!--    <scm>
+            <connection>scm:svn:http://svn.geotools.org/geotools/trunk/gt/modules/</connection>
+            <url>http://svn.geotools.org/geotools/trunk/gt/modules/</url>
+        </scm>
+    -->
     <licenses>
         <license>
             <name>Lesser General Public License (LGPL)</name>
@@ -37,279 +39,277 @@
 
     <properties>
         <gt.version>8.0</gt.version>
-	<gs.version>2.2-SNAPSHOT</gs.version>
-	<spring.version>3.1.1.RELEASE</spring.version>
-        <gst.version>1.0.1</gst.version>  
+        <gs.version>2.2-SNAPSHOT</gs.version>
+        <spring.version>3.1.1.RELEASE</spring.version>
+        <gst.version>1.0.1</gst.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jt.version>1.2-GAEZM15092011</jt.version>
-	<nfms-utils.version>1.1-SNAPSHOT</nfms-utils.version>
+        <nfms-utils.version>1.1-SNAPSHOT</nfms-utils.version>
     </properties>
 
 
     <modules>
-      <module>geostore</module>
-      <module>appstats</module>
-      <module>apparealayer</module>
-      <module>onlinestats</module>
+        <module>geostore</module>
+        <module>appstats</module>
+        <module>apparealayer</module>
+        <module>onlinestats</module>
     </modules>
-    
+
     <issueManagement>
         <system>github</system>
         <url>https://github.com/nfms4redd/nfms-utils/issues</url>
     </issueManagement>
 
     <scm>
-	<url>https://github.com/nfms4redd/nfms-utils</url>
+        <url>https://github.com/nfms4redd/nfms-utils</url>
         <connection>scm:git:git@github.com:nfms4redd/nfms-utils.git</connection>
     </scm>
 
     <distributionManagement>
-    <!--..................................-->
-    <!--      GeoSolutions Repository     -->
-    <!--..................................-->
-      <repository>
-        <uniqueVersion>false</uniqueVersion>
-        <id>geosolutions</id>
-        <url>ftp://maven.geo-solutions.it</url>
-      </repository>
+        <repository>
+            <id>nfms4redd</id>
+            <url>ftp://maven.nfms4redd.org/repo</url>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
     </distributionManagement>
 
-  <!-- =========================================================== -->
-  <!--     Dependency Management                                   -->
-  <!-- =========================================================== -->
-  <dependencyManagement>
-    <dependencies>
-    
-      <!-- GeoTools -->
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-process</artifactId>
-            <version>${gt.version}</version>
-	    <!-- Excluded because the 2.7.1 version is needed for running test for online stats -->
-	    <!-- if you need gt-process module  you have to manual add xercesImpl dependency using dependencyManagement-->
-	    <exclusions>
-                <exclusion>
-		    <groupId>xerces</groupId>
-                    <artifactId>xercesImpl</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>      
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-process-raster</artifactId>
-            <version>${gt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-geotiff</artifactId>
-            <version>${gt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-epsg-hsql</artifactId>
-            <version>${gt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-geotiff</artifactId>
-            <version>${gt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-epsg-wkt</artifactId>
-            <version>${gt.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.geotools</groupId>
-          <artifactId>gt-coverage</artifactId>
-          <version>${gt.version}</version>
-	    <!-- Exluded because the 2.7.1 version is needed for running test for online stats -->
-            <!-- if you need gt-coverage module  you have to manual add xercesImpl dependency using dependencyManagement-->
-	    <exclusions>
-                <exclusion>
-		    <groupId>xerces</groupId>
-                    <artifactId>xercesImpl</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-          <groupId>org.geotools</groupId>
-          <artifactId>gt-sample-data</artifactId>
-            <version>${gt.version}</version>
-        </dependency>     
+    <!-- =========================================================== -->
+    <!--     Dependency Management                                   -->
+    <!-- =========================================================== -->
+    <dependencyManagement>
+        <dependencies>
 
-        <!-- =========================================================== -->
-        <!-- GeoServer -->
-        <!-- =========================================================== -->	
+            <!-- GeoTools -->
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-process</artifactId>
+                <version>${gt.version}</version>
+                <!-- Excluded because the 2.7.1 version is needed for running test for online stats -->
+                <!-- if you need gt-process module  you have to manual add xercesImpl dependency using dependencyManagement-->
+                <exclusions>
+                    <exclusion>
+                        <groupId>xerces</groupId>
+                        <artifactId>xercesImpl</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-process-raster</artifactId>
+                <version>${gt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-geotiff</artifactId>
+                <version>${gt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-epsg-hsql</artifactId>
+                <version>${gt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-epsg-wkt</artifactId>
+                <version>${gt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-coverage</artifactId>
+                <version>${gt.version}</version>
+                <!-- Exluded because the 2.7.1 version is needed for running test for online stats -->
+                <!-- if you need gt-coverage module  you have to manual add xercesImpl dependency using dependencyManagement-->
+                <exclusions>
+                    <exclusion>
+                        <groupId>xerces</groupId>
+                        <artifactId>xercesImpl</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-sample-data</artifactId>
+                <version>${gt.version}</version>
+            </dependency>
 
-	<dependency>
-	    <groupId>org.geoserver.extension</groupId>
-            <artifactId>wps-core</artifactId>
-	    <version>${gs.version}</version>
-	</dependency>
-	
-        <!-- =========================================================== -->
-        <!-- GeoStore -->
-        <!-- =========================================================== -->
+            <!-- =========================================================== -->
+            <!-- GeoServer -->
+            <!-- =========================================================== -->
 
-        <dependency>
-            <groupId>it.geosolutions.geostore</groupId>
-            <artifactId>geostore-model</artifactId>
-            <version>${gst.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>it.geosolutions.geostore</groupId>
-            <artifactId>geostore-services-api</artifactId>
-            <version>${gst.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>it.geosolutions.geostore</groupId>
-            <artifactId>geostore-rest-api</artifactId>
-            <version>${gst.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>it.geosolutions.geostore</groupId>
-            <artifactId>geostore-rest-client</artifactId>
-            <version>${gst.version}</version>
-        </dependency>
-        
-        <!-- =========================================================== -->
-        <!-- JAITools -->
-        <!-- =========================================================== -->
+            <dependency>
+                <groupId>org.geoserver.extension</groupId>
+                <artifactId>wps-core</artifactId>
+                <version>${gs.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.jaitools</groupId>
-            <artifactId>jt-classifiedstats</artifactId>
-            <version>${jt.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.jaitools</groupId>
-          <artifactId>jt-utils</artifactId>
-          <version>${jt.version}</version>
-        </dependency>
-        <!-- Set proper version for deps needed by GT -->
-        <dependency>
-            <groupId>org.jaitools</groupId>
-            <artifactId>jt-zonalstats</artifactId>
-            <version>${jt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jaitools</groupId>
-            <artifactId>jt-rangelookup</artifactId>
-            <version>${jt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jaitools</groupId>
-            <artifactId>jt-contour</artifactId>
-            <version>${jt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jaitools</groupId>
-            <artifactId>jt-vectorize</artifactId>
-            <version>${jt.version}</version>
-        </dependency>        
+            <!-- =========================================================== -->
+            <!-- GeoStore -->
+            <!-- =========================================================== -->
 
-        <!-- =========================================================== -->        
-   	
-        <!-- =========================================================== -->
-        <!-- OTHER NFMS-UTILS modules -->
-        <!-- =========================================================== -->
-	<dependency>
-            <groupId>it.geosolutions.unredd</groupId>
-            <artifactId>unredd-geostore-model</artifactId>
-            <version>${nfms-utils.version}</version>
-        </dependency>        
-	<dependency>
-            <groupId>it.geosolutions.unredd</groupId>
-            <artifactId>apparealayer</artifactId>
-            <version>${nfms-utils.version}</version>
-        </dependency>
-	<dependency>
-            <groupId>it.geosolutions.unredd</groupId>
-            <artifactId>teststats</artifactId>
-            <version>${nfms-utils.version}</version>
-        </dependency>
-	<dependency>
-            <groupId>it.geosolutions.unredd</groupId>
-            <artifactId>onlinestats</artifactId>
-            <version>${nfms-utils.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>it.geosolutions.geostore</groupId>
+                <artifactId>geostore-model</artifactId>
+                <version>${gst.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>it.geosolutions.geostore</groupId>
+                <artifactId>geostore-services-api</artifactId>
+                <version>${gst.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>it.geosolutions.geostore</groupId>
+                <artifactId>geostore-rest-api</artifactId>
+                <version>${gst.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>it.geosolutions.geostore</groupId>
+                <artifactId>geostore-rest-client</artifactId>
+                <version>${gst.version}</version>
+            </dependency>
 
-        <!-- Other Tools -->
-        <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-            <version>2.7.1</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-cli</groupId>
-            <artifactId>commons-cli</artifactId>
-            <version>1.2</version>
-        </dependency>        
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
-        </dependency>
-        <dependency>
-          <groupId>commons-collections</groupId>
-          <artifactId>commons-collections</artifactId>
-          <version>3.2.1</version>
-        </dependency>
-        <dependency>
-          <groupId>org.springframework</groupId>
-          <artifactId>spring-core</artifactId>
-          <version>${spring.version}</version>
-        </dependency>       
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.5.11</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.5.11</version>
-            <scope>test</scope>
-        </dependency>   
-        <dependency>
-            <groupId>javax.media</groupId>
-            <artifactId>jai_imageio</artifactId>
-            <version>1.1</version>
-        </dependency>     
-        <dependency>
-            <groupId>javax.media</groupId>
-            <artifactId>jai_core</artifactId>
-            <version>1.1.3</version>
-        </dependency>
-		<dependency>
-		   <groupId>org.geoserver</groupId>
-		   <artifactId>main</artifactId>
-		   <version>2.2-SNAPSHOT</version>
-		   <classifier>tests</classifier>
-		   <scope>test</scope>
-		</dependency>
-		<dependency>
-		   <groupId>junit</groupId>
-		   <artifactId>junit</artifactId>
-		   <version>4.10</version>
-		   <scope>test</scope>
-		</dependency>
-		<dependency>
-		   <groupId>com.mockrunner</groupId>
-		   <artifactId>mockrunner</artifactId>
-		   <version>0.3.1</version>
-		   <scope>test</scope>
-		</dependency>
-    </dependencies>
-    </dependencyManagement>  
+            <!-- =========================================================== -->
+            <!-- JAITools -->
+            <!-- =========================================================== -->
+
+            <dependency>
+                <groupId>org.jaitools</groupId>
+                <artifactId>jt-classifiedstats</artifactId>
+                <version>${jt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jaitools</groupId>
+                <artifactId>jt-utils</artifactId>
+                <version>${jt.version}</version>
+            </dependency>
+            <!-- Set proper version for deps needed by GT -->
+            <dependency>
+                <groupId>org.jaitools</groupId>
+                <artifactId>jt-zonalstats</artifactId>
+                <version>${jt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jaitools</groupId>
+                <artifactId>jt-rangelookup</artifactId>
+                <version>${jt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jaitools</groupId>
+                <artifactId>jt-contour</artifactId>
+                <version>${jt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jaitools</groupId>
+                <artifactId>jt-vectorize</artifactId>
+                <version>${jt.version}</version>
+            </dependency>
+
+            <!-- =========================================================== -->
+
+            <!-- =========================================================== -->
+            <!-- OTHER NFMS-UTILS modules -->
+            <!-- =========================================================== -->
+            <dependency>
+                <groupId>it.geosolutions.unredd</groupId>
+                <artifactId>unredd-geostore-model</artifactId>
+                <version>${nfms-utils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>it.geosolutions.unredd</groupId>
+                <artifactId>apparealayer</artifactId>
+                <version>${nfms-utils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>it.geosolutions.unredd</groupId>
+                <artifactId>teststats</artifactId>
+                <version>${nfms-utils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>it.geosolutions.unredd</groupId>
+                <artifactId>onlinestats</artifactId>
+                <version>${nfms-utils.version}</version>
+            </dependency>
+
+            <!-- Other Tools -->
+            <dependency>
+                <groupId>xerces</groupId>
+                <artifactId>xercesImpl</artifactId>
+                <version>2.7.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-cli</groupId>
+                <artifactId>commons-cli</artifactId>
+                <version>1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.16</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.5.11</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.5.11</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.media</groupId>
+                <artifactId>jai_imageio</artifactId>
+                <version>1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.media</groupId>
+                <artifactId>jai_core</artifactId>
+                <version>1.1.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.geoserver</groupId>
+                <artifactId>main</artifactId>
+                <version>2.2-SNAPSHOT</version>
+                <classifier>tests</classifier>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.10</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.mockrunner</groupId>
+                <artifactId>mockrunner</artifactId>
+                <version>0.3.1</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <repositories>
+
+        <repository>
+            <id>nfms4redd</id>
+            <name>nfms4redd maven repository</name>
+            <url>http://maven.nfms4redd.org/</url>
+        </repository>
 
         <!-- used for jaitools 1.2-GAEZ -->
         <repository>
@@ -339,9 +339,10 @@
             </snapshots>
         </repository>
     </repositories>
-        
+
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -351,6 +352,7 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <inherited>true</inherited>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -367,7 +369,8 @@
                     </execution>
                 </executions>
             </plugin>
-	    <plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.2.2</version>
@@ -376,13 +379,14 @@
                 </configuration>
             </plugin>
         </plugins>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>1.0-beta-7</version>
-			</extension>
-		</extensions>
+
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>2.3</version>
+            </extension>
+        </extensions>
     </build>
-        
+
 </project>
