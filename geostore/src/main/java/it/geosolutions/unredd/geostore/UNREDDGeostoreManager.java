@@ -277,7 +277,21 @@ public class UNREDDGeostoreManager {
 
 		client.insert(resource);
 	}
-    
+
+    /**
+     * Inserts a custom statistics report
+     */
+	public Long insertReport(Map<String, String> attributes, String data) {
+		UNREDDReport report = new UNREDDReport();
+		report.setAttributes(attributes);
+		
+		RESTResource resource = report.createRESTResource();
+		resource.setData(data);
+		resource.setName(String.valueOf(resource.hashCode()));
+
+		return client.insert(resource);
+	}
+	
     public Resource searchResourceByName(String resourceName)
     {
         SearchFilter searchFilter = new FieldFilter(BaseField.NAME, resourceName, SearchOperator.EQUAL_TO);

@@ -30,7 +30,8 @@ public enum UNREDDCategories {
     STATSDATA("StatsData"),
     CHARTSCRIPT("ChartScript"),
     CHARTDATA("ChartData"),
-    FEEDBACK("Feedback");
+    FEEDBACK("Feedback"),
+    REPORT("Report");
 
     private String name;
 
