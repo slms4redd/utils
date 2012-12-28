@@ -44,6 +44,7 @@
         <gst.version>1.0.1</gst.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jt.version>1.2-GAEZM15092011</jt.version>
+        <geostore.version>1.1-SNAPSHOT</geostore.version>
         <nfms-utils.version>1.1-SNAPSHOT</nfms-utils.version>
     </properties>
 

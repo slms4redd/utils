@@ -1,22 +1,20 @@
 package it.geosolutions.unredd.geostore;
 
 import it.geosolutions.geostore.core.model.Resource;
-import it.geosolutions.geostore.core.model.StoredData;
 import it.geosolutions.geostore.core.model.enums.DataType;
-import it.geosolutions.geostore.services.dto.ShortResource;
 import it.geosolutions.geostore.services.dto.search.*;
 import it.geosolutions.geostore.services.rest.GeoStoreClient;
 import it.geosolutions.geostore.services.rest.model.RESTResource;
-import it.geosolutions.geostore.services.rest.model.ShortResourceList;
+import it.geosolutions.geostore.services.rest.model.ResourceList;
 import it.geosolutions.unredd.geostore.model.*;
 import it.geosolutions.unredd.geostore.utils.NameUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBException;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +56,7 @@ public class UNREDDGeostoreManager {
         SearchFilter filter = new AndFilter(
                 new FieldFilter(BaseField.NAME, resourceName, SearchOperator.LIKE),
                 createCategoryFilter(category));
-        ShortResourceList list = client.searchResources(filter);
+        ResourceList list = client.searchResources(filter, null, null, false, false);
 
         return list != null && list.getList() != null && !list.getList().isEmpty();
     }
@@ -89,9 +87,7 @@ public class UNREDDGeostoreManager {
                 createCategoryFilter(UNREDDCategories.STATSDEF),
                 createAttributeFilter(UNREDDStatsDef.ReverseAttributes.LAYER, layername));
 
-        ShortResourceList list = client.searchResources(filter);
-
-        return getResourceList(list);
+        return search(filter);
     }
     
     public List<Resource> searchStatsDefsByChartScript(UNREDDChartScript chartScript) {
@@ -108,98 +104,48 @@ public class UNREDDGeostoreManager {
                 createCategoryFilter(UNREDDCategories.CHARTSCRIPT),
                 createAttributeFilter(UNREDDChartScript.ReverseAttributes.STATSDEF, statsdef));
 
-        ShortResourceList list = client.searchResources(filter);
-        //if (list == null) {
-        //    return null;
-        //}
-        List<Resource> resources = new ArrayList<Resource>();
-
-        if (list.getList() != null) {
-            for (ShortResource shortResource : list.getList()) {
-                
-                Resource resource = client.getResource(shortResource.getId());
-                resources.add(resource);
-            }
-        }
-        
-        return resources;
+        return search(filter);
     }
 
-    /*********
-     * Returns a list of statsDef objects having attribute StatsDef=statsDefName
-     * @param statsDefName
-     * @return
-     *
-     * @deprecated 
-     */
-    public Map<Resource, String> searchStatsDataByStatsDef(String statsDefName) throws UnsupportedEncodingException, JAXBException {
-
-        SearchFilter filter = new CategoryFilter(UNREDDCategories.STATSDATA.getName(), SearchOperator.EQUAL_TO);
-        if (statsDefName != null) {
-            filter = new AndFilter(filter, createAttributeFilter(UNREDDStatsData.Attributes.STATSDEF, statsDefName));
-        }
-        
-        ShortResourceList list = client.searchResources(filter);
-
-        Map<Resource, String> resources = new HashMap<Resource, String>();
-        if (list.getList() != null && !list.getList().isEmpty()) {
-            for (ShortResource shortResource : list.getList()) {
-                Resource resource = client.getResource(shortResource.getId());
-                String data = client.getData(shortResource.getId(), MediaType.WILDCARD_TYPE);
-
-                resources.put(resource, data);
-            }
-        } else {
-            System.out.println("No stats data found with name " + statsDefName);
-        }
-        
-        return resources;
-    }
-
-    // TODO: change name in searchStatsDataByStatsDef
-    public List<Resource> searchStatsDataByStatsDef2(String statsDefName) throws UnsupportedEncodingException, JAXBException {
+    public List<Resource> searchStatsDataByStatsDef(String statsDefName) throws UnsupportedEncodingException, JAXBException {
 
         SearchFilter filter = createCategoryFilter(UNREDDCategories.STATSDATA);
         if (statsDefName != null) {
             filter = new AndFilter(filter, createAttributeFilter(UNREDDStatsData.Attributes.STATSDEF, statsDefName));
         }
 
-        List<Resource> ret = new ArrayList<Resource>();
-
-        ShortResourceList list = client.searchResources(filter);
-        if ( CollectionUtils.isNotEmpty(list.getList())) {
-            for (ShortResource shortResource : list.getList()) {
-                Resource resource = client.getResource(shortResource.getId()); // TODO: use new metod getFull()
-                String data = client.getData(shortResource.getId(), MediaType.WILDCARD_TYPE);
-                StoredData sdata = new StoredData();
-                sdata.setData(data);
-                resource.setData(sdata);
-                ret.add(resource);
-            }
-        } else {
-            LOGGER.info("No stats data found for stats def: " + statsDefName);
+        List<Resource> list = search(filter);
+        if ( CollectionUtils.isEmpty(list)) {
+        	LOGGER.info("No stats data found for stats def: " + statsDefName);
         }
-
-        return ret;
+        return list;
     }
-
+    
+    /**
+     * Kept for compatibility with some Groovy scripts out there.
+     * 
+     * @deprecated use the exact same method called {@link #searchStatsDataByStatsDef(String statsDefName)}
+     */
+    @Deprecated
+    public List<Resource> searchStatsDataByStatsDef2(String statsDefName) throws UnsupportedEncodingException, JAXBException {
+    	return searchStatsDataByStatsDef(statsDefName);
+    }
     
     /*********
      * Returns a layer with the given name
      * @param layerName
-     * @return
+     * @return first found layer with this name, or null if none found
      */
     public Resource searchLayer(String layerName) throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = new AndFilter(
-                createCategoryFilter(UNREDDCategories.LAYER),
-                new FieldFilter(BaseField.NAME, layerName, SearchOperator.EQUAL_TO)
-                );
+            createCategoryFilter(UNREDDCategories.LAYER),
+            new FieldFilter(BaseField.NAME, layerName, SearchOperator.EQUAL_TO)
+        );
 
-        ShortResourceList shortResourceList = client.searchResources(filter);
-
-        List<Resource> resourceList = getResourceList(shortResourceList);
-        if ( CollectionUtils.isEmpty(resourceList) )
+        List<Resource> resourceList = search(filter);
+        if(CollectionUtils.isEmpty(resourceList)) {
             return null;
+        }
     
         return resourceList.get(0);
     }
@@ -223,9 +169,7 @@ public class UNREDDGeostoreManager {
                 createAttributeFilter(UNREDDLayerUpdate.Attributes.LAYER, layerName)
                 );
 
-        ShortResourceList list = client.searchResources(filter);
-
-        return getResourceList(list);
+        return search(filter);
     }
 
     /*********
@@ -238,9 +182,7 @@ public class UNREDDGeostoreManager {
                 createCategoryFilter(UNREDDCategories.CHARTDATA),
                 createAttributeFilter(UNREDDChartData.Attributes.CHARTSCRIPT, chartScriptName) );
 
-        ShortResourceList list = client.searchResources(filter);
-
-        return getResourceList(list);
+        return search(filter);
     }
             
     /*********
@@ -249,9 +191,8 @@ public class UNREDDGeostoreManager {
      */
     public List<Resource> getLayers() throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = createCategoryFilter(UNREDDCategories.LAYER);
-        ShortResourceList list = client.searchResources(filter);
         
-        return getResourceList(list);
+        return search(filter);
     }
 
     /**
@@ -259,9 +200,7 @@ public class UNREDDGeostoreManager {
      */
     public List<Resource> getFeedbacks() throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = createCategoryFilter(UNREDDCategories.FEEDBACK);
-        ShortResourceList list = client.searchResources(filter);
-        
-        return getResourceList(list);
+        return search(filter);
     }
     
     /**
@@ -294,11 +233,10 @@ public class UNREDDGeostoreManager {
 	
     public Resource searchResourceByName(String resourceName)
     {
-        SearchFilter searchFilter = new FieldFilter(BaseField.NAME, resourceName, SearchOperator.EQUAL_TO);
-        ShortResourceList rlist = client.searchResources(searchFilter);
-        if (!rlist.isEmpty()) {
-            ShortResource shortRes = rlist.getList().get(0);
-            return client.getResource(shortRes.getId());
+        SearchFilter filter = new FieldFilter(BaseField.NAME, resourceName, SearchOperator.EQUAL_TO);
+        List<Resource> list = search(filter);
+        if (!list.isEmpty()) {
+            return list.get(0);
         }
         
         return null;
@@ -306,15 +244,14 @@ public class UNREDDGeostoreManager {
     
     public Resource searchResourceByName(String resourceName, UNREDDCategories cat)
     {
-        //SearchFilter searchFilter = new FieldFilter(BaseField.NAME, resourceName, SearchOperator.EQUAL_TO);
-        SearchFilter searchFilter = new AndFilter(
-                createCategoryFilter(cat),
-                new FieldFilter(BaseField.NAME, resourceName, SearchOperator.EQUAL_TO));
+        SearchFilter filter = new AndFilter(
+            createCategoryFilter(cat),
+            new FieldFilter(BaseField.NAME, resourceName, SearchOperator.EQUAL_TO)
+        );
         
-        ShortResourceList rlist = client.searchResources(searchFilter);
-        if (!rlist.isEmpty()) {
-            ShortResource shortRes = rlist.getList().get(0);
-            return client.getResource(shortRes.getId());
+        List<Resource> list = search(filter);
+        if (!list.isEmpty()) {
+            return list.get(0);
         }
         
         return null;
@@ -326,9 +263,8 @@ public class UNREDDGeostoreManager {
      */
     public List<Resource> getStatsDefs() throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = new CategoryFilter(UNREDDCategories.STATSDEF.getName(), SearchOperator.EQUAL_TO);
-        ShortResourceList list = client.searchResources(filter);
 
-        return getResourceList(list);
+        return search(filter);
     }
     
     /*********
@@ -337,61 +273,15 @@ public class UNREDDGeostoreManager {
      */
     public List<Resource> getUNREDDResources(UNREDDCategories cat) throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = createCategoryFilter(cat);
-        ShortResourceList list = client.searchResources(filter);
-
-        return getResourceList(list);
+        return search(filter);
     }
     
-    /*********
-     * Converts a ShortResourceList to a list of Resource objects
-     * @return
-     */
-    private List<Resource> getResourceList(ShortResourceList list) {
-        ArrayList<Resource> resources = new ArrayList<Resource>();
-        if ( CollectionUtils.isNotEmpty(list.getList()) ) {
-            for (ShortResource shortResource : list.getList()) {
-                Resource resource = client.getResource(shortResource.getId());
-                resources.add(resource);
-            }
-        } else {
-            LOGGER.info("No resource found");
-        }
-        
-        return resources;
-    }
-
     public void deleteLayer(String layerName) {
         recurseDelete(layerName, UNREDDCategories.LAYER, UNREDDCategories.LAYERUPDATE, UNREDDLayerUpdate.Attributes.LAYER);
     }
     
     public void deleteStats(String statsDefName) {
         recurseDelete(statsDefName, UNREDDCategories.STATSDEF, UNREDDCategories.STATSDATA, UNREDDStatsData.Attributes.STATSDEF);
-        /*
-        LOGGER.warn("Recurse delete on StatsDef " + statsDefName);
-
-        SearchFilter filter = new AndFilter(
-                createCategoryFilter(UNREDDCategories.STATSDATA),
-                createAttributeFilter(UNREDDStatsData.Attributes.STATSDEF, statsDefName));
-        ShortResourceList statsDataList = client.searchResources(filter);
-        if( CollectionUtils.isNotEmpty(statsDataList.getList())) {
-            for (ShortResource scd : statsDataList.getList()) {
-                LOGGER.warn("Removing statsData " + scd.getName());
-                client.deleteResource(scd.getId());
-            }
-        }
-        filter = new AndFilter(
-                    createCategoryFilter(UNREDDCategories.STATSDEF),
-                    new FieldFilter(BaseField.NAME, statsDefName, SearchOperator.EQUAL_TO)
-                );
-        ShortResourceList statsDefList = client.searchResources(filter);
-        if( CollectionUtils.isNotEmpty(statsDefList.getList())) {
-            ShortResource statsDef = statsDefList.getList().get(0);
-            LOGGER.warn("Removing statsDef " + statsDef);
-            client.deleteResource(statsDef.getId());
-        } else {
-            LOGGER.warn("StatsDef not found : " + statsDefName);
-        }
-        */
     }
 
     public void deleteChartScript(String chartScriptName) {
@@ -402,30 +292,31 @@ public class UNREDDGeostoreManager {
         LOGGER.warn("Recurse delete on " + parentCategory.getName() + " " + resourceName);
 
         SearchFilter filter = new AndFilter(
-                createCategoryFilter(childCategory),
-                createAttributeFilter(childAttribute, resourceName));
-        ShortResourceList statsDataList = client.searchResources(filter);
+            createCategoryFilter(childCategory),
+            createAttributeFilter(childAttribute, resourceName)
+        );
+        ResourceList statsDataList = client.searchResources(filter, null, null, false, false);
         if( CollectionUtils.isNotEmpty(statsDataList.getList())) {
-            for (ShortResource scd : statsDataList.getList()) {
+            for (Resource scd : statsDataList.getList()) {
                 LOGGER.warn("Removing " + childCategory.getName() + " " + scd.getName());
                 client.deleteResource(scd.getId());
             }
         }
+        
         filter = new AndFilter(
-                    createCategoryFilter(parentCategory),
-                    new FieldFilter(BaseField.NAME, resourceName, SearchOperator.EQUAL_TO)
-                );
-        ShortResourceList statsDefList = client.searchResources(filter);
+            createCategoryFilter(parentCategory),
+            new FieldFilter(BaseField.NAME, resourceName, SearchOperator.EQUAL_TO)
+        );
+        ResourceList statsDefList = client.searchResources(filter, null, null, false, false);
         if( CollectionUtils.isNotEmpty(statsDefList.getList())) {
-            ShortResource statsDef = statsDefList.getList().get(0);
+            Resource statsDef = statsDefList.getList().get(0);
             LOGGER.warn("Removing " + parentCategory.getName() + " " + statsDef);
             client.deleteResource(statsDef.getId());
         } else {
             LOGGER.warn(parentCategory.getName() + " not found : " + resourceName);
         }    
     }
-
-
+       
     private static SearchFilter createCategoryFilter(UNREDDCategories category) {
         return new CategoryFilter(category.getName(), SearchOperator.EQUAL_TO);
     }
@@ -437,5 +328,8 @@ public class UNREDDGeostoreManager {
     private static SearchFilter createAttributeFilter(ReverseAttributeDef at, String value) {
         return new AttributeFilter(value, at.getName(), DataType.STRING, SearchOperator.EQUAL_TO);
     }
-
+    
+    private List<Resource> search(SearchFilter filter) {
+    	return client.searchResources(filter, null, null, true, true).getList();
+    }
 }

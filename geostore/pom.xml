@@ -50,18 +50,22 @@
         <dependency>
             <groupId>it.geosolutions.geostore</groupId>
             <artifactId>geostore-model</artifactId>
+            <version>${geostore.version}</version>
         </dependency>
         <dependency>
             <groupId>it.geosolutions.geostore</groupId>
             <artifactId>geostore-services-api</artifactId>
+            <version>${geostore.version}</version>
         </dependency>
         <dependency>
             <groupId>it.geosolutions.geostore</groupId>
             <artifactId>geostore-rest-api</artifactId>
+            <version>${geostore.version}</version>
         </dependency>
         <dependency>
             <groupId>it.geosolutions.geostore</groupId>
             <artifactId>geostore-rest-client</artifactId>
+            <version>${geostore.version}</version>
         </dependency>
 
         <!-- =========================================================== -->
