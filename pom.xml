@@ -54,6 +54,7 @@
         <module>appstats</module>
         <module>apparealayer</module>
         <module>onlinestats</module>
+        <module>common-tests</module>
     </modules>
 
     <issueManagement>

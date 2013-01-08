@@ -71,3 +71,9 @@ Installing OnlineStats extension in GeoServer
    * GeoServer: jt-utils-1.2.0.jar
    * AppStats: jt-utils-1.2-GAEZM15092011.jar
 
+============
+common-tests
+============
+
+Project with common classes used to tests. Initially it contains just an interface to mark the tests that require
+external software to work (geoserver, geobatch, ...).
