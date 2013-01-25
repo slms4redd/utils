@@ -277,7 +277,10 @@ public abstract class UNREDDResource<A extends AttributeDef, R extends ReverseAt
         resource.setId(getId());
         resource.setName(getName());
         resource.setDescription(getDescription());
-        resource.setData(getData());
+        String data = getData();
+        if(data != null){
+        	resource.setData(data);
+        }
         resource.setAttribute(createShortAttributeList());
         return resource;
     }
