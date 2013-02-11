@@ -26,6 +26,14 @@ package it.geosolutions.unredd.geostore.utils;
  */
 public class NameUtils {
     
+    /**
+     * This regex is that will be passed to Geoserver and with wich geotools ImageMosaic code will parse the granule name.
+     * Is hardcoded here because of it is strict related to the granulename format that is specified in these methods, so it
+     * is useless externalize just this regex outside of this class.
+     * The regex must match dates in format <b>yyyy-mm-dd</b> or <b>yyyy-mm</b> or <b>yyyy</b>  
+     */
+    public static final String TIME_REGEX = "(?<=_)(\\d{4})";//(-[0-9]{2}(-[0-9]{2})?)?)";
+    
     public static String buildLayerUpdateName(String layerName, String year, String month, String day) {
         return buildNameYearMonth(layerName, year, month, day);
     }
