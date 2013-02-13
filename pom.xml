@@ -39,7 +39,7 @@
 
     <properties>
         <gt.version>8.0</gt.version>
-        <gs.version>2.2-SNAPSHOT</gs.version>
+        <gs.version>2.2</gs.version>
         <spring.version>3.1.1.RELEASE</spring.version>
         <gst.version>1.0.1</gst.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
