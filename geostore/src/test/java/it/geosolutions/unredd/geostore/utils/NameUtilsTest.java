@@ -81,7 +81,6 @@ public class NameUtilsTest {
         
         List<String> notMatchingList = new ArrayList<String>();
         notMatchingList.add( NameUtils.buildTifFileName("any1", "any2", "any3",null).replace(".tif", ""));
-        notMatchingList.add( NameUtils.buildTifFileName("3222", "any2", "any3",null).replace(".tif", ""));
         notMatchingList.add( NameUtils.buildTifFileName("any1", "02", "93",null).replace(".tif", ""));
         
         for(String el : notMatchingList){

@@ -32,7 +32,7 @@ public class NameUtils {
      * is useless externalize just this regex outside of this class.
      * The regex must match dates in format <b>yyyy-mm-dd</b> or <b>yyyy-mm</b> or <b>yyyy</b>  
      */
-    public static final String TIME_REGEX = "(?<=_)(\\d{4})";//(-[0-9]{2}(-[0-9]{2})?)?)";
+    public static final String TIME_REGEX = "[0-9]{4}(-[0-9]{2}(-[0-9]{2})?)?";
     
     public static String buildLayerUpdateName(String layerName, String year, String month, String day) {
         return buildNameYearMonth(layerName, year, month, day);
