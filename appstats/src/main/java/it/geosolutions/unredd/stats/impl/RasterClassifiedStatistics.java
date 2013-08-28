@@ -63,6 +63,9 @@ public class RasterClassifiedStatistics {
 
         } catch (Throwable e) {
             // swallow exception in case the op has already been registered.
+        } finally{
+            LOGGER.debug("Scaning for all plugins with ImageIO.scanForPlugins() static method...");
+            ImageIO.scanForPlugins();
         }
     }
     
