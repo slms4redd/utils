@@ -109,7 +109,8 @@ public class StatsRunner {
         }
         data.setFile(dataF);
         data.setNoValue(cfg.getDataLayer().getNodata()); // may be null
-
+        data.setRanges(cfg.getDataLayer().getRanges());
+        
         int cnt = -1;
         int pivotIndex = -1;
 

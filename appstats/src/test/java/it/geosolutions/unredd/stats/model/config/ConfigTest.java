@@ -29,6 +29,7 @@ import java.util.List;
 import javax.xml.bind.JAXB;
 import junit.framework.TestCase;
 import org.apache.log4j.Logger;
+import org.geotools.TestData;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -173,4 +174,45 @@ public class ConfigTest extends TestCase {
         StatsRunner sr = new StatsRunner(cfg);
         sr.run();
     }
+    
+    public void testRunClassWithRanges() throws IOException {
+
+        File file = ctx.getResource("classpath:classStatWithRanges.xml").getFile();
+        assertNotNull("test file not found", file);
+
+        StatisticConfiguration cfg = JAXB.unmarshal(file, StatisticConfiguration.class);
+        assertNotNull("Error unmarshalling file", cfg);
+        
+        int exludeNull = 0;
+        int exludeTrue = 0;
+        int exludeFalse = 0;
+        int rangesNotNull = 0;
+        //check if the ranges has been loaded correctly
+        for(int i=0; i<2; i++){
+            List<Range> rlist = cfg.getClassifications().get(i).getRanges();
+            if(rlist.size() == 4){
+                for(Range r : rlist){
+                    if(r.getRange() != null){
+                        rangesNotNull++;                        
+                    }
+                    if(r.getIsAnExcludeRange() == null){
+                        exludeNull++;
+                        continue;
+                    }
+                    if(r.getIsAnExcludeRange()){
+                        exludeTrue++;                                            
+                    }
+                    if(!r.getIsAnExcludeRange()){
+                        exludeFalse++;                        
+                    }
+                }
+            }
+        }
+        if(!(exludeNull == 2 && exludeTrue == 1 && exludeFalse == 1 && rangesNotNull == 4)){
+            fail("The range loaded seems differents as expected...");
+        }
+        boolean check = StatisticChecker.check(cfg);
+        assertTrue("Configuration is not valid", check);
+    }
+
 }

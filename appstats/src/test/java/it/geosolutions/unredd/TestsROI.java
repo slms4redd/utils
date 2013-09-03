@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import javax.media.jai.RenderedOp;
 import javax.media.jai.operator.MosaicDescriptor;
 import javax.xml.bind.JAXBContext;
@@ -153,10 +154,10 @@ public class TestsROI extends TestCase {
         StatsRunner runner = new StatsRunner(cfg);
         runner.run();
 
-        // save the files (with or without ROI) for a visual feedback
-        // RenderedOp ro = MosaicDescriptor.create(imgArr, MosaicDescriptor.MOSAIC_TYPE_BLEND,null, rgeomArr, null, new double[]{0}, null);
-        // File tmp = TestData.temp(this, "saved.png");
-        // ImageIO.write(imgArr[0], "png", tmp);
+//         save the files (with or without ROI) for a visual feedback
+         RenderedOp ro = MosaicDescriptor.create(imgArr, MosaicDescriptor.MOSAIC_TYPE_BLEND,null, rgeomArr, null, new double[]{0}, null);
+         File tmp = TestData.temp(this, "saved.png");
+         ImageIO.write(imgArr[0], "png", tmp);
         //
         //
         // BufferedImage bi = ro.getAsBufferedImage();

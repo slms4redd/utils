@@ -19,7 +19,14 @@
  */
 package it.geosolutions.unredd.stats.impl;
 
+import it.geosolutions.unredd.stats.RangeParser;
+import it.geosolutions.unredd.stats.model.config.Range;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.collections.ListUtils;
 
 /**
  *
@@ -29,6 +36,7 @@ public class DataFile {
 
     protected File file;
     protected Double noValue;
+    protected List<RangeParser> rangeParser;
 
     public DataFile() {
     }
@@ -52,10 +60,26 @@ public class DataFile {
     public void setNoValue(Double noValue) {
         this.noValue = noValue;
     }
+    
+    public void setRanges(List<Range> rangeList){
+        if(rangeParser == null){
+            rangeParser = new ArrayList<RangeParser>();
+        }
+        for(Range r : rangeList){
+            rangeParser.add(new RangeParser(r.getRange(), r.getIsAnExcludeRange()));
+        }
+    }
+    
+    public List getRanges(){
+        if(rangeParser == null){
+            return null;
+        }
+        return ListUtils.unmodifiableList(rangeParser);
+    }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[file=" + file + ", noValue=" + noValue + ']';
+        return getClass().getSimpleName() + "[file=" + file + ", noValue=" + noValue + ", rangeSize=" + rangeParser.size() + "]";
     }
 
 }

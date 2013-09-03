@@ -19,20 +19,49 @@
  */
 package it.geosolutions.unredd.stats.model.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
+ * This class models a layer used for any kind of stats computation.
+ * It can be used to model data layers or classification layer as well
  *
  * @author ETj (etj at geo-solutions.it)
+ * @author DamianoG (damiano.giampaoli at geo-solutions.it)
  */
 @XmlRootElement
 @XmlSeeAlso({FileLayer.class,GeoServerLayer.class,ClassificationLayer.class})
 public class Layer {
+    /**
+     * The path on filesystem of the raster file representing this layer
+     */
     private String file;
+    
+    /**
+     * The name 
+     */
     private String name;
+    
+    /**
+     * Value to use as noData
+     */
     private Double nodata;
-
+    
+    /**
+     * A list of range to use as classes when computing stats on the layer
+     */
+    private List<Range> ranges = new ArrayList<Range>();
+    
+    /**
+     * Use the ranges list as a single non-continuos class or each range as a different class 
+     */
+    private Boolean computeRangesAsDifferentClasses;
+    
     public String getFile() {
         return file;
     }
@@ -57,4 +86,22 @@ public class Layer {
         this.nodata = nodata;
     }
 
+    @XmlElement(name="range")
+    public List<Range> getRanges() {
+        return ranges;
+    }
+
+    public void setRanges(List<Range> ranges) {
+        this.ranges = ranges;
+    }
+
+    public Boolean getComputeRangesAsDifferentClasses() {
+        return computeRangesAsDifferentClasses;
+    }
+
+    public void setComputeRangesAsDifferentClasses(Boolean computeRangesAsDifferentClasses) {
+        this.computeRangesAsDifferentClasses = computeRangesAsDifferentClasses;
+    }
+    
+    
 }

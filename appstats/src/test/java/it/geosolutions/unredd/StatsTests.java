@@ -23,7 +23,9 @@ import it.geosolutions.unredd.stats.impl.DataFile;
 import it.geosolutions.unredd.stats.impl.RasterClassifiedStatistics;
 import it.geosolutions.unredd.stats.impl.StatsRunner;
 import it.geosolutions.unredd.stats.model.config.Output;
+import it.geosolutions.unredd.stats.model.config.Range;
 import it.geosolutions.unredd.stats.model.config.StatisticConfiguration;
+import it.geosolutions.unredd.stats.model.config.StatsType;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -106,6 +108,49 @@ public class StatsTests extends TestCase {
         }
     }
     
+    public void testStatsWithRanges() {
+
+        RasterClassifiedStatistics rcs = new RasterClassifiedStatistics();
+        
+        //load the test params
+        Map<String, File> prop = loadTestParams();
+        //create the classification layers array
+        List<DataFile> classificatorsList = new ArrayList<DataFile>();
+        for(int i=0; i<prop.size()-1; i++){
+            classificatorsList.add(new DataFile(prop.get(CLASSIFICATOR_PREFIX + (i+1))));
+        }
+        OutputStatsTest ost = null;
+        try {
+            // run the stats
+            DataFile df = new DataFile(prop.get(DATA));
+            Range r = new Range();
+            r.setRange("[1;1]");
+            r.setIsAnExcludeRange(true);
+            List<Range> arrList = new ArrayList<Range>();
+            arrList.add(r);
+            df.setRanges(arrList);
+            Map<MultiKey, List<Result>> results = rcs.execute(true, df, classificatorsList, Arrays
+                    .asList(STATS));
+            LOGGER.info(results.toString());
+            ost = OutputStatsTest.buildOutputStatsTest();
+            ost.outputStats(results);
+            
+            if(isDefault){
+                // do the checks only if the default data and clasificators layers are loaded
+                assertEquals(results.toString(),"{MultiKey[0]=[band 0 sum: 3449837399963,9688 Naccepted=9454812 (offered:9454812 - NoData:0 - NaN:0)  Classifier:MultiKey[0]], MultiKey[1]=[band 0 sum: 1599142551508,9062 Naccepted=4355376 (offered:4355376 - NoData:0 - NaN:0)  Classifier:MultiKey[1]]}");
+            }
+            
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        } /*finally{
+            File of = new File(ost.getOutputFile());
+            of.delete();
+            if(of.exists()){
+                fail("Failed when try to remove tmp files...");
+            }
+        }*/
+    }
+    
     private static Map<String, File> loadTestParams(){
         
         Properties defaultProperties = new Properties();
@@ -157,10 +202,13 @@ public class StatsTests extends TestCase {
          */
         public OutputStatsTest(StatisticConfiguration cfg) {
             super(cfg);
+            this.cfg = cfg;
         }
         
         public static OutputStatsTest buildOutputStatsTest() {
             StatisticConfiguration cfg = new StatisticConfiguration();
+            StatsType [] sType = {StatsType.COUNT};
+            cfg.setStats(Arrays.asList(sType));
             Output output = new Output();
             output.setSeparator(";");
             output.setNanValue("-256");

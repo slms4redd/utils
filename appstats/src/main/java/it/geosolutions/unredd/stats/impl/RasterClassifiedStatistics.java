@@ -5,9 +5,13 @@
 
 package it.geosolutions.unredd.stats.impl;
 
+import it.geosolutions.unredd.stats.RangeParser;
+import it.geosolutions.unredd.stats.model.config.Layer;
+
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +21,9 @@ import javax.media.jai.JAI;
 import javax.media.jai.ParameterBlockJAI;
 import javax.media.jai.PlanarImage;
 import javax.media.jai.RenderedOp;
-import javax.media.jai.TileCache;
-
-import org.jaitools.numeric.Range;
 
 import org.apache.commons.collections.keyvalue.MultiKey;
+import org.apache.log4j.Logger;
 import org.geotools.image.jai.Registry;
 import org.geotools.resources.image.ImageUtilities;
 import org.jaitools.imageutils.ROIGeometry;
@@ -29,11 +31,10 @@ import org.jaitools.media.jai.classifiedstats.ClassifiedStats;
 import org.jaitools.media.jai.classifiedstats.ClassifiedStatsDescriptor;
 import org.jaitools.media.jai.classifiedstats.ClassifiedStatsRIF;
 import org.jaitools.media.jai.classifiedstats.Result;
+import org.jaitools.numeric.Range;
 import org.jaitools.numeric.Statistic;
 
 import com.sun.media.jai.operator.ImageReadDescriptor;
-import java.util.ArrayList;
-import org.apache.log4j.Logger;
 
 /**
  * A process computing classified statistics based on a raster data set and a set of raster classification layers
@@ -101,10 +102,10 @@ public class RasterClassifiedStatistics {
 
         try {
             dataImage = loadImage(deferredMode, dataFile.getFile());
-
+            List<Range> dataRanges = extractJAIRange(dataFile);
             classifiers = new RenderedImage[classificationFiles.size()];
             classNoData = new Double[classificationFiles.size()];
-
+            
             int i = 0;
             for (DataFile dfile : classificationFiles) {
                 classifiers[i] = loadImage(deferredMode, dfile.getFile());
@@ -118,6 +119,17 @@ public class RasterClassifiedStatistics {
             pb.addSource(dataImage);
             pb.setParameter("classifiers", classifiers);
             pb.setParameter("stats", reqStatsArr);
+            if(dataRanges != null && dataRanges.size() > 0){
+                pb.setParameter("ranges", dataRanges);
+                pb.setParameter("rangesType", Range.Type.INCLUDE);
+                LOGGER.info("The ranges Included are:");
+                for(Range r : dataRanges){
+                    LOGGER.info(r.toString());
+                }
+            }
+            else{
+                LOGGER.info("No ranges are included, process all pixel values");
+            }
             if (dataNDR != null) {
                 pb.setParameter("noDataRanges", dataNDR);
             }
@@ -173,6 +185,19 @@ public class RasterClassifiedStatistics {
             }
 
         }
+    }
+    
+    public List<Range> extractJAIRange(DataFile layer){
+        
+        List<RangeParser> rList = layer.getRanges();
+        List<Range> outList = new ArrayList<Range>();
+        if(rList != null && !rList.isEmpty()){
+            for(RangeParser rp : rList){
+                Range r = new Range(rp.getLeftEndPoint(), true, rp.getRightEndPoint(), true);
+                outList.add(r);
+            }
+        }    
+        return outList;
     }
 
     /**
