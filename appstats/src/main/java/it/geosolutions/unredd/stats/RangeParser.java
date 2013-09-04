@@ -79,7 +79,7 @@ public class RangeParser {
      * @param isExludeRange
      * @throws IllegalArgumentException  if the string is null or not parsable or if is not a valid range ( left endpoint > endpoint)
      */
-    public RangeParser(String range, boolean isExludeRange) throws IllegalArgumentException{
+    public RangeParser(String range, Boolean isExludeRange) throws IllegalArgumentException{
         this.buildRange(range, isExludeRange);
     }
     
