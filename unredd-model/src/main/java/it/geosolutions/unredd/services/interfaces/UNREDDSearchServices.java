@@ -17,12 +17,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package it.geosolutions.unredd.services;
+package it.geosolutions.unredd.services.interfaces;
 
-import it.geosolutions.geostore.core.model.Resource;
-import it.geosolutions.unredd.geostore.model.UNREDDCategories;
+import it.geosolutions.unredd.services.data.CategoryPOJO;
+import it.geosolutions.unredd.services.data.ResourcePOJO;
+
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+
 import javax.xml.bind.JAXBException;
 
 /**
@@ -39,27 +41,27 @@ public interface UNREDDSearchServices {
      * @param statsDefName
      * @return
      */
-    public List<Resource> searchChartDataByChartScript(String chartScriptName) throws UnsupportedEncodingException, JAXBException;
+    public List<ResourcePOJO> searchChartDataByChartScript(String chartScriptName) throws UnsupportedEncodingException, JAXBException;
     
-    public List<Resource> searchStatsDefByLayer(String layername) throws UnsupportedEncodingException, JAXBException;
+    public List<ResourcePOJO> searchStatsDefByLayer(String layername) throws UnsupportedEncodingException, JAXBException;
     
-    public List<Resource> searchChartScriptByStatsDef(String statsdef) throws UnsupportedEncodingException, JAXBException;
+    public List<ResourcePOJO> searchChartScriptByStatsDef(String statsdef) throws UnsupportedEncodingException, JAXBException;
     
     /**
      * Returns a list of layerUpdate objects having attribute Layer=layerName
      * @param statsDefName
      * @return
      */
-    public List<Resource> searchLayerUpdatesByLayerName(String layerName);
+    public List<ResourcePOJO> searchLayerUpdatesByLayerName(String layerName);
     
     /**
      * Returns a layer with the given name
      * @param layerName
      * @return first found layer with this name, or null if none found
      */
-    public Resource searchLayer(String layerName) throws UnsupportedEncodingException, JAXBException;
+    public ResourcePOJO searchLayer(String layerName) throws UnsupportedEncodingException, JAXBException;
     
-    public List<Resource> searchStatsDataByStatsDef(String statsDefName) throws UnsupportedEncodingException, JAXBException;
+    public List<ResourcePOJO> searchStatsDataByStatsDef(String statsDefName) throws UnsupportedEncodingException, JAXBException;
     
-    public Resource searchResourceByName(String resourceName, UNREDDCategories cat);
+    public ResourcePOJO searchResourceByName(String resourceName, CategoryPOJO cat);
 }

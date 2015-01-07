@@ -20,20 +20,12 @@
     <!--     Module Description                                      -->
     <!-- =========================================================== -->
     <groupId>it.geosolutions.unredd</groupId>
-    <artifactId>unredd-geostore-model</artifactId>
+    <artifactId>unredd-model</artifactId>
     <version>1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>UN-REDD utils: GeoStore model</name>
-    <description>Model of the UNREDD webapp mapped on GeoStore resources</description>
-    <!-- <url>http://www.geo-solutions.it/maven_reports/gb/</url> -->
-  
-    <!--
-    <scm>
-        <connection>scm:svn:http://svn.geotools.org/geotools/trunk/gt/modules/</connection>
-        <url>http://svn.geotools.org/geotools/trunk/gt/modules/</url>
-    </scm>
-    -->
+    <name>UN-REDD utils: Model</name>
+    <description>Model of the UNREDD webapp Configuration System - Generic Interfaces and data Structures</description>
     <licenses>
         <license>
             <name>Lesser General Public License (LGPL)</name>
@@ -43,39 +35,6 @@
     </licenses>
 
     <dependencies>
-
-        <!-- =========================================================== -->
-        <!-- GeoStore -->
-        <!-- =========================================================== -->
-        <dependency>
-            <groupId>it.geosolutions.unredd</groupId>
-    	    <artifactId>unredd-model</artifactId>
-    	    <version>${project.version}</version>
-        </dependency>
-        
-        <!-- =========================================================== -->
-        <!-- GeoStore -->
-        <!-- =========================================================== -->
-        <dependency>
-            <groupId>it.geosolutions.geostore</groupId>
-            <artifactId>geostore-model</artifactId>
-            <version>${geostore.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>it.geosolutions.geostore</groupId>
-            <artifactId>geostore-services-api</artifactId>
-            <version>${geostore.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>it.geosolutions.geostore</groupId>
-            <artifactId>geostore-rest-api</artifactId>
-            <version>${geostore.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>it.geosolutions.geostore</groupId>
-            <artifactId>geostore-rest-client</artifactId>
-            <version>${geostore.version}</version>
-        </dependency>
 
         <!-- =========================================================== -->
         <!-- JSON -->

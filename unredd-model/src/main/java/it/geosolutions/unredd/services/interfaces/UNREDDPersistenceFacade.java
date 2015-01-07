@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package it.geosolutions.unredd.services;
+package it.geosolutions.unredd.services.interfaces;
 
 /**
  * This Interface groups in a single one all the operations on a Generic UNREDD Persistance system  

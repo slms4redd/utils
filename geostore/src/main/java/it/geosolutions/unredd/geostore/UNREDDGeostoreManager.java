@@ -2,16 +2,28 @@ package it.geosolutions.unredd.geostore;
 
 import it.geosolutions.geostore.core.model.Resource;
 import it.geosolutions.geostore.core.model.enums.DataType;
-import it.geosolutions.geostore.services.dto.search.*;
+import it.geosolutions.geostore.services.dto.search.AndFilter;
+import it.geosolutions.geostore.services.dto.search.AttributeFilter;
+import it.geosolutions.geostore.services.dto.search.BaseField;
+import it.geosolutions.geostore.services.dto.search.CategoryFilter;
+import it.geosolutions.geostore.services.dto.search.FieldFilter;
+import it.geosolutions.geostore.services.dto.search.SearchFilter;
+import it.geosolutions.geostore.services.dto.search.SearchOperator;
 import it.geosolutions.geostore.services.rest.GeoStoreClient;
 import it.geosolutions.geostore.services.rest.model.RESTResource;
 import it.geosolutions.geostore.services.rest.model.ResourceList;
-import it.geosolutions.unredd.geostore.model.*;
+import it.geosolutions.unredd.geostore.adapter.UNREDDGeostoreManagerAdapter;
+import it.geosolutions.unredd.geostore.model.AttributeDef;
+import it.geosolutions.unredd.geostore.model.ReverseAttributeDef;
+import it.geosolutions.unredd.geostore.model.UNREDDCategories;
+import it.geosolutions.unredd.geostore.model.UNREDDChartData;
+import it.geosolutions.unredd.geostore.model.UNREDDChartScript;
+import it.geosolutions.unredd.geostore.model.UNREDDFeedback;
+import it.geosolutions.unredd.geostore.model.UNREDDLayerUpdate;
+import it.geosolutions.unredd.geostore.model.UNREDDReport;
+import it.geosolutions.unredd.geostore.model.UNREDDStatsData;
+import it.geosolutions.unredd.geostore.model.UNREDDStatsDef;
 import it.geosolutions.unredd.geostore.utils.NameUtils;
-import it.geosolutions.unredd.services.UNREDDLayerDAO;
-import it.geosolutions.unredd.services.UNREDDPersistenceFacade;
-import it.geosolutions.unredd.services.UNREDDResourceDAO;
-import it.geosolutions.unredd.services.UNREDDSearchServices;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -27,8 +39,13 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Invoke calls on GeoStore, bridging UNREDD model.
+ * This class is the services interface on Geostore. 
+ * Since after some time we decide to abstract from the underlying persistence system 
+ * this class is used in a specific Adapter to a more generic interface exposed to clients.
+ * 
+ * Although this class is not Deprecated its usage is highly discouraged, use {@link UNREDDGeostoreManagerAdapter} instead. 
  */
-public class UNREDDGeostoreManager implements UNREDDPersistenceFacade{
+public class UNREDDGeostoreManager{
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UNREDDGeostoreManager.class);
 
@@ -59,10 +76,6 @@ public class UNREDDGeostoreManager implements UNREDDPersistenceFacade{
         return client;
     }
 
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDSearchServices#searchStatsDefByLayer(java.lang.String)
-     */
-    @Override
     public List<Resource> searchStatsDefByLayer(String layername) throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = new AndFilter(
                 createCategoryFilter(UNREDDCategories.STATSDEF),
@@ -71,10 +84,6 @@ public class UNREDDGeostoreManager implements UNREDDPersistenceFacade{
         return search(filter);
     }
     
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDSearchServices#searchChartScriptByStatsDef(java.lang.String)
-     */
-    @Override
     public List<Resource> searchChartScriptByStatsDef(String statsdef) throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = new AndFilter(
                 //  new FieldFilter(BaseField.NAME, "%", SearchOperator.LIKE) ,
@@ -84,10 +93,6 @@ public class UNREDDGeostoreManager implements UNREDDPersistenceFacade{
         return search(filter);
     }
 
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDSearchServices#searchStatsDataByStatsDef(java.lang.String)
-     */
-    @Override
     public List<Resource> searchStatsDataByStatsDef(String statsDefName) throws UnsupportedEncodingException, JAXBException {
 
         SearchFilter filter = createCategoryFilter(UNREDDCategories.STATSDATA);
@@ -102,10 +107,6 @@ public class UNREDDGeostoreManager implements UNREDDPersistenceFacade{
         return list;
     }
     
-    /** 
-     * @see it.geosolutions.unredd.services.UNREDDSearchServices#searchLayer(java.lang.String)
-     */
-    @Override
     public Resource searchLayer(String layerName) throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = new AndFilter(
             createCategoryFilter(UNREDDCategories.LAYER),
@@ -120,10 +121,6 @@ public class UNREDDGeostoreManager implements UNREDDPersistenceFacade{
         return resourceList.get(0);
     }
     
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDSearchServices#searchLayerUpdatesByLayerName(java.lang.String)
-     */
-    @Override
     public List<Resource> searchLayerUpdatesByLayerName(String layerName) {
         SearchFilter filter = new AndFilter(
                 createCategoryFilter(UNREDDCategories.LAYERUPDATE),
@@ -133,10 +130,6 @@ public class UNREDDGeostoreManager implements UNREDDPersistenceFacade{
         return search(filter);
     }
 
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDSearchServices#searchChartDataByChartScript(java.lang.String)
-     */
-    @Override
     public List<Resource> searchChartDataByChartScript(String chartScriptName) throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = new AndFilter(
                 createCategoryFilter(UNREDDCategories.CHARTDATA),
@@ -145,10 +138,6 @@ public class UNREDDGeostoreManager implements UNREDDPersistenceFacade{
         return search(filter);
     }
     
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDSearchServices#searchResourceByName(java.lang.String, it.geosolutions.unredd.geostore.model.UNREDDCategories)
-     */
-    @Override
     public Resource searchResourceByName(String resourceName, UNREDDCategories cat)
     {
         SearchFilter filter = new AndFilter(
@@ -164,88 +153,48 @@ public class UNREDDGeostoreManager implements UNREDDPersistenceFacade{
         return null;
     }
 
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDLayerDAO#getLayers()
-     */
-    @Override
     public List<Resource> getLayers() throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = createCategoryFilter(UNREDDCategories.LAYER);
         
         return search(filter);
     }
     
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDLayerDAO#getUNREDDResources(it.geosolutions.unredd.geostore.model.UNREDDCategories)
-     */
-    @Override
     public List<Resource> getUNREDDResources(UNREDDCategories cat) throws UnsupportedEncodingException, JAXBException {
         SearchFilter filter = createCategoryFilter(cat);
         return search(filter);
     }
     
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDLayerDAO#deleteLayer(java.lang.String)
-     */
-    @Override
     public void deleteLayer(String layerName) {
         recurseDelete(layerName, UNREDDCategories.LAYER, UNREDDCategories.LAYERUPDATE, UNREDDLayerUpdate.Attributes.LAYER);
     }
     
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDLayerDAO#deleteStats(java.lang.String)
-     */
-    @Override
     public void deleteStats(String statsDefName) {
         recurseDelete(statsDefName, UNREDDCategories.STATSDEF, UNREDDCategories.STATSDATA, UNREDDStatsData.Attributes.STATSDEF);
     }
     
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDResourceDAO#getResource(java.lang.Long, boolean)
-     */
-    @Override
     public Resource getResource(Long id, boolean full) {
         return client.getResource(id, full);
     }
 
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDResourceDAO#deleteResource(java.lang.Long)
-     */
-    @Override
     public void deleteResource(Long id) {
         client.deleteResource(id);
         
     }
 
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDResourceDAO#updateResource(java.lang.Long, it.geosolutions.geostore.services.rest.model.RESTResource)
-     */
-    @Override
     public void updateResource(Long id, RESTResource resource) {
         client.updateResource(id, resource);
         
     }
 
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDResourceDAO#insert(it.geosolutions.geostore.services.rest.model.RESTResource)
-     */
-    @Override
     public Long insert(RESTResource resource) {
         return client.insert(resource);
     }
 
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDResourceDAO#setData(java.lang.Long, java.lang.String)
-     */
-    @Override
     public void setData(Long id, String data) {
         client.setData(id, data);
         
     }
 
-    /**
-     * @see it.geosolutions.unredd.services.UNREDDResourceDAO#getData(java.lang.Long, javax.ws.rs.core.MediaType)
-     */
-    @Override
     public String getData(Long id, MediaType acceptMediaType) {
         if(acceptMediaType == null){
             acceptMediaType = MediaType.WILDCARD_TYPE;

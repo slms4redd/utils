@@ -17,11 +17,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package it.geosolutions.unredd.services;
+package it.geosolutions.unredd.services.interfaces;
 
-import it.geosolutions.geostore.core.model.Resource;
-import it.geosolutions.geostore.services.rest.model.RESTResource;
-import javax.ws.rs.core.MediaType;
+import it.geosolutions.unredd.services.data.ResourcePOJO;
 
 /**
  * This Interface exposes the CRUD operations over the underlying persistence system.
@@ -33,15 +31,30 @@ import javax.ws.rs.core.MediaType;
  */
 public interface UNREDDResourceDAO {
     
-    public Resource getResource(Long id, boolean full);
+    public ResourcePOJO getResource(Long id, boolean full);
     
     public void deleteResource(Long id);
     
-    public void updateResource(Long id, RESTResource resource);
+    /**
+     * 
+     * @param id
+     * @param resource  RESTResource
+     */
+    public void updateResource(Long id, ResourcePOJO resource);
     
-    public Long insert(RESTResource resource);
+    /**
+     * @param resource RESTResource
+     * @return
+     */
+    public Long insert(ResourcePOJO resource);
     
     public void setData(Long id, String data);
     
-    public String getData(Long id, MediaType acceptMediaType);
+    /**
+     * 
+     * @param id
+     * @param acceptMediaType a string belong to the domain of the javax.ws.rs.core.MediaType enumerator. See <a href="http://docs.oracle.com/javaee/6/api/javax/ws/rs/core/MediaType.html">the javadoc</a>.
+     * @return
+     */
+    public String getData(Long id, String acceptMediaType);
 }

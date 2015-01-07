@@ -17,12 +17,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package it.geosolutions.unredd.services;
+package it.geosolutions.unredd.services.interfaces;
 
-import it.geosolutions.geostore.core.model.Resource;
-import it.geosolutions.unredd.geostore.model.UNREDDCategories;
+import it.geosolutions.unredd.services.data.CategoryPOJO;
+import it.geosolutions.unredd.services.data.ResourcePOJO;
+
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+
 import javax.xml.bind.JAXBException;
 
 /**
@@ -39,7 +41,7 @@ public interface UNREDDLayerDAO {
      * Returns the list of all resources with a given UNREDDResources value
      * @return
      */
-    public List<Resource> getUNREDDResources(UNREDDCategories cat) throws UnsupportedEncodingException, JAXBException;
+    public List<ResourcePOJO> getUNREDDResources(CategoryPOJO cat) throws UnsupportedEncodingException, JAXBException;
     
     public void deleteLayer(String layerName);
     
@@ -49,5 +51,5 @@ public interface UNREDDLayerDAO {
      * Returns the list of all stat defs
      * @return
      */
-    public List<Resource> getLayers() throws UnsupportedEncodingException, JAXBException;
+    public List<ResourcePOJO> getLayers() throws UnsupportedEncodingException, JAXBException;
 }
