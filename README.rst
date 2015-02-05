@@ -9,14 +9,14 @@ A utility for building classification layers.
 AppStats
 ========
 
-The nfms4redd statistics engine.
+The slms4redd statistics engine.
 
 
 ========
 GeoStore
 ========
 
-The Geostore model used in all apps of nfms4redd project.
+The Geostore model used in all apps of slms4redd project.
 
 
 ============
