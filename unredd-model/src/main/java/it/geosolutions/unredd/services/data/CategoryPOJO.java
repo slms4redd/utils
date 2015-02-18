@@ -23,6 +23,25 @@ package it.geosolutions.unredd.services.data;
  * @author DamianoG
  *
  */
-public class CategoryPOJO {
+public enum CategoryPOJO {
 
+    LAYER("Layer"),
+    LAYERUPDATE("LayerUpdate"),
+    STATSDEF("StatsDef"),
+    STATSDATA("StatsData"),
+    CHARTSCRIPT("ChartScript"),
+    CHARTDATA("ChartData"),
+    FEEDBACK("Feedback"),
+    REPORT("Report");
+
+    private String name;
+
+    private CategoryPOJO(String categoryName) {
+        this.name = categoryName;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
 }

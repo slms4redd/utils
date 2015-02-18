@@ -146,7 +146,7 @@ public class UNREDDGeostoreManager{
         );
         
         List<Resource> list = search(filter);
-        if (!list.isEmpty()) {
+        if (list != null && !list.isEmpty()) {
             return list.get(0);
         }
         
@@ -240,7 +240,7 @@ public class UNREDDGeostoreManager{
     {
         SearchFilter filter = new FieldFilter(BaseField.NAME, resourceName, SearchOperator.EQUAL_TO);
         List<Resource> list = search(filter);
-        if (!list.isEmpty()) {
+        if (list!= null && !list.isEmpty()) {
             return list.get(0);
         }
         

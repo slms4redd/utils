@@ -44,7 +44,8 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
     @Autowired
     private UNREDDDataConverter converter;
 
-    private UNREDDGeostoreManager manager;
+    @Autowired
+    private UNREDDGeostoreManager geostoreManager;
     
     /**
      * @see it.geosolutions.unredd.services.interfaces.UNREDDLayerDAO#getUNREDDResources(it.geosolutions.unredd.services.data.CategoryPOJO)
@@ -53,7 +54,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
     public List<ResourcePOJO> getUNREDDResources(CategoryPOJO cat)
             throws UnsupportedEncodingException, JAXBException {
         UNREDDCategories categ = converter.convertCategoryPOJO2UNREDDCategories(cat);
-        List<Resource> res = manager.getUNREDDResources(categ);
+        List<Resource> res = geostoreManager.getUNREDDResources(categ);
         return converter.convertResource2ResourcePOJO(res);
     }
 
@@ -62,7 +63,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
      */
     @Override
     public void deleteLayer(String layerName) {
-        manager.deleteLayer(layerName);
+        geostoreManager.deleteLayer(layerName);
     }
 
     /**
@@ -70,7 +71,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
      */
     @Override
     public void deleteStats(String statsDefName) {
-        manager.deleteStats(statsDefName);
+        geostoreManager.deleteStats(statsDefName);
     }
 
     /**
@@ -78,7 +79,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
      */
     @Override
     public List<ResourcePOJO> getLayers() throws UnsupportedEncodingException, JAXBException {
-        List<Resource> list = manager.getLayers();
+        List<Resource> list = geostoreManager.getLayers();
         return converter.convertResource2ResourcePOJO(list);
     }
 
@@ -87,7 +88,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
      */
     @Override
     public ResourcePOJO getResource(Long id, boolean full) {
-        Resource res = manager.getResource(id, full);
+        Resource res = geostoreManager.getResource(id, full);
         return converter.convertResource2ResourcePOJO(res);
     }
 
@@ -96,7 +97,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
      */
     @Override
     public void deleteResource(Long id) {
-        manager.deleteResource(id);
+        geostoreManager.deleteResource(id);
     }
 
     /**
@@ -105,7 +106,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
     @Override
     public void updateResource(Long id, ResourcePOJO resource) {
         RESTResource res = converter.convertResourcePOJO2RESTResource(resource);
-        manager.updateResource(id, res);
+        geostoreManager.updateResource(id, res);
     }
 
     /**
@@ -114,7 +115,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
     @Override
     public Long insert(ResourcePOJO resource) {
         RESTResource res = converter.convertResourcePOJO2RESTResource(resource);
-        return manager.insert(res);
+        return geostoreManager.insert(res);
     }
 
     /**
@@ -122,7 +123,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
      */
     @Override
     public void setData(Long id, String data) {
-        manager.setData(id, data);
+        geostoreManager.setData(id, data);
     }
 
     /**
@@ -131,7 +132,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
     @Override
     public String getData(Long id, String acceptMediaType) {
         MediaType type = converter.convertString2MediaType(acceptMediaType);
-        return manager.getData(id, type);
+        return geostoreManager.getData(id, type);
     }
 
     /**
@@ -140,7 +141,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
     @Override
     public List<ResourcePOJO> searchChartDataByChartScript(String chartScriptName)
             throws UnsupportedEncodingException, JAXBException {
-        List<Resource> list = manager.searchChartDataByChartScript(chartScriptName);
+        List<Resource> list = geostoreManager.searchChartDataByChartScript(chartScriptName);
         return converter.convertResource2ResourcePOJO(list);
     }
 
@@ -150,7 +151,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
     @Override
     public List<ResourcePOJO> searchStatsDefByLayer(String layername)
             throws UnsupportedEncodingException, JAXBException {
-        List<Resource> res = manager.searchStatsDefByLayer(layername);
+        List<Resource> res = geostoreManager.searchStatsDefByLayer(layername);
         return converter.convertResource2ResourcePOJO(res);
     }
 
@@ -160,7 +161,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
     @Override
     public List<ResourcePOJO> searchChartScriptByStatsDef(String statsdef)
             throws UnsupportedEncodingException, JAXBException {
-        List<Resource> res = manager.searchChartScriptByStatsDef(statsdef);
+        List<Resource> res = geostoreManager.searchChartScriptByStatsDef(statsdef);
         return converter.convertResource2ResourcePOJO(res);
     }
 
@@ -169,7 +170,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
      */
     @Override
     public List<ResourcePOJO> searchLayerUpdatesByLayerName(String layerName) {
-        List<Resource> res = manager.searchLayerUpdatesByLayerName(layerName);
+        List<Resource> res = geostoreManager.searchLayerUpdatesByLayerName(layerName);
         return converter.convertResource2ResourcePOJO(res);
     }
 
@@ -179,7 +180,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
     @Override
     public ResourcePOJO searchLayer(String layerName) throws UnsupportedEncodingException,
             JAXBException {
-        Resource res = manager.searchLayer(layerName);
+        Resource res = geostoreManager.searchLayer(layerName);
         return converter.convertResource2ResourcePOJO(res);
     }
 
@@ -189,7 +190,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
     @Override
     public List<ResourcePOJO> searchStatsDataByStatsDef(String statsDefName)
             throws UnsupportedEncodingException, JAXBException {
-        List<Resource> res = manager.searchStatsDataByStatsDef(statsDefName);
+        List<Resource> res = geostoreManager.searchStatsDataByStatsDef(statsDefName);
         return converter.convertResource2ResourcePOJO(res);
     }
 
@@ -199,7 +200,7 @@ public class UNREDDGeostoreManagerAdapter implements UNREDDPersistenceFacade{
     @Override
     public ResourcePOJO searchResourceByName(String resourceName, CategoryPOJO cat) {
         UNREDDCategories categ = converter.convertCategoryPOJO2UNREDDCategories(cat);
-        Resource res = manager.searchResourceByName(resourceName, categ);
+        Resource res = geostoreManager.searchResourceByName(resourceName, categ);
         return converter.convertResource2ResourcePOJO(res);
     }
 }

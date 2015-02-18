@@ -19,6 +19,7 @@
  */
 package it.geosolutions.unredd.services.data;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -96,7 +97,10 @@ public class ResourcePOJO {
     }
 
     public List<AttributePOJO> getAttribute() {
-        return attribute;
+        if(attribute == null){
+            return null;
+        }
+        return Collections.unmodifiableList(attribute);
     }
 
     public void setAttribute(List<AttributePOJO> attribute) {
@@ -118,6 +122,4 @@ public class ResourcePOJO {
     public void setCategory(CategoryPOJO category) {
         this.category = category;
     }
-    
-    
 }
