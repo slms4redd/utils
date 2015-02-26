@@ -55,7 +55,6 @@
         <module>apparealayer</module>
         <!-- 07/01/2015 Commented since module onlinestats is not used at the moment in any project -->        
         <!--module>onlinestats</module-->
-        <module>common-tests</module>
         <module>unredd-model</module>
     </modules>
 
