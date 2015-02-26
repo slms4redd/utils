@@ -37,6 +37,8 @@ import org.junit.Test;
 
 import com.mockrunner.mock.web.MockHttpServletResponse;
 
+import static org.junit.Assert.*;
+
 /**
  * @author DamianoG
  * 

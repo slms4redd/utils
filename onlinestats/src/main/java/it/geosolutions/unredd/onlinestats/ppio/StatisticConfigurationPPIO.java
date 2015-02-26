@@ -35,8 +35,12 @@ import com.thoughtworks.xstream.XStream;
  */
 public class StatisticConfigurationPPIO extends XStreamPPIO {
 
+//    protected StatisticConfigurationPPIO() {
+//        super(StatisticConfiguration.class);
+//    }
+
     protected StatisticConfigurationPPIO() {
-        super(StatisticConfiguration.class);
+        super(StatisticConfiguration.class, null);
     }
 
     @Override

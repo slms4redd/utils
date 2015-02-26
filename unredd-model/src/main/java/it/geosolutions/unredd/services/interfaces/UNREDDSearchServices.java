@@ -38,7 +38,7 @@ public interface UNREDDSearchServices {
 
     /**
      * Returns a list of ChartData objects having attribute CHARTSCRIPT=chartScriptName
-     * @param statsDefName
+     * @param chartScriptName
      * @return
      */
     public List<ResourcePOJO> searchChartDataByChartScript(String chartScriptName) throws UnsupportedEncodingException, JAXBException;
@@ -49,7 +49,7 @@ public interface UNREDDSearchServices {
     
     /**
      * Returns a list of layerUpdate objects having attribute Layer=layerName
-     * @param statsDefName
+     * @param layerName
      * @return
      */
     public List<ResourcePOJO> searchLayerUpdatesByLayerName(String layerName);
