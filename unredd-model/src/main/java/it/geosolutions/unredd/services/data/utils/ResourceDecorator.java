@@ -20,6 +20,7 @@
 package it.geosolutions.unredd.services.data.utils;
 
 import it.geosolutions.unredd.services.data.AttributePOJO;
+import it.geosolutions.unredd.services.data.AttributePOJO.DataType;
 import it.geosolutions.unredd.services.data.CategoryPOJO;
 import it.geosolutions.unredd.services.data.ModelDomainNames;
 import it.geosolutions.unredd.services.data.ResourcePOJO;
@@ -57,54 +58,37 @@ public class ResourceDecorator {
     }
     
     public void addTextAttribute(ModelDomainNames name, String value) {
-        List<AttributePOJO> attribute = getClonedAttributeslist();
-        if(attribute == null){
-            attribute = new ArrayList<AttributePOJO>();
+        addAttribute(name, value, AttributePOJO.DataType.STRING);
+    }
+    
+    public boolean updateTextAttribute(ModelDomainNames name, String value) {
+        return updateAttribute(name, value, AttributePOJO.DataType.STRING);
+    }
+    
+    public void addNumericAttribute(ModelDomainNames name, String value) {
+        try{
+            Double.parseDouble(value);
         }
-        attribute.add(new AttributePOJO(name.getName(), value, AttributePOJO.DataType.STRING));
-        resource.setAttribute(attribute);
+        catch(Exception e){
+            throw new IllegalArgumentException("the passed value: '" + value + "' is not a number...");
+        }
+        addAttribute(name, value, AttributePOJO.DataType.NUMBER);
+    }
+    
+    public boolean updateNumericAttribute(ModelDomainNames name, String value) {
+        try{
+            Double.parseDouble(value);
+        }
+        catch(Exception e){
+            throw new IllegalArgumentException("the passed value: '" + value + "' is not a number...");
+        }
+        return updateAttribute(name, value, AttributePOJO.DataType.NUMBER);
     }
     
     public void addTextAttributes(ModelDomainNames name, String... value){
         for(String el : value){
             addTextAttribute(name, el);
         }
-    }
-    
-    public boolean updateTextAttribute(ModelDomainNames name, String value) {
-        List<AttributePOJO> attribute = getClonedAttributeslist();
-        if(attribute == null){
-            attribute = new ArrayList<AttributePOJO>();
-            return false;
-        }
-        AttributePOJO found = removeAttribute(name);
-        if(found == null){
-            return false;
-        }
-        attribute.remove(found);
-        found.setValue(value);
-        attribute.add(found);
-        resource.setAttribute(attribute);
-        return true;
-    }
-    
-    private AttributePOJO removeAttribute(ModelDomainNames name){
-        List<AttributePOJO> attribute = getClonedAttributeslist();
-        if(name == null){
-            return null;
-        }
-        AttributePOJO found = null;
-        for(AttributePOJO attr : attribute){
-            if(name.getName().equals(attr.getName())){
-                found = attr;
-                break;
-            }
-        }
-        if(found == null){
-            return null;
-        }
-        attribute.remove(found);
-        return found;
     }
     
     public String getFirstAttributeValue(ModelDomainNames name){
@@ -158,6 +142,51 @@ public class ResourceDecorator {
         }
         resource.setAttribute(attribute);
         return flag;
+    }
+    
+    private void addAttribute(ModelDomainNames name, String value, DataType dtype) {
+        List<AttributePOJO> attribute = getClonedAttributeslist();
+        if(attribute == null){
+            attribute = new ArrayList<AttributePOJO>();
+        }
+        attribute.add(new AttributePOJO(name.getName(), value, dtype));
+        resource.setAttribute(attribute);
+    }
+    
+    private boolean updateAttribute(ModelDomainNames name, String value, DataType dtype) {
+        List<AttributePOJO> attribute = getClonedAttributeslist();
+        if(attribute == null){
+            attribute = new ArrayList<AttributePOJO>();
+            return false;
+        }
+        AttributePOJO found = removeAttribute(name);
+        if(found == null){
+            return false;
+        }
+        attribute.remove(found);
+        found.setValue(value);
+        attribute.add(found);
+        resource.setAttribute(attribute);
+        return true;
+    }
+    
+    private AttributePOJO removeAttribute(ModelDomainNames name){
+        List<AttributePOJO> attribute = getClonedAttributeslist();
+        if(name == null){
+            return null;
+        }
+        AttributePOJO found = null;
+        for(AttributePOJO attr : attribute){
+            if(name.getName().equals(attr.getName())){
+                found = attr;
+                break;
+            }
+        }
+        if(found == null){
+            return null;
+        }
+        attribute.remove(found);
+        return found;
     }
     
     public Long getId() {
