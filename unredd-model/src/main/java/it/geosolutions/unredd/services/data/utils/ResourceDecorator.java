@@ -87,7 +87,8 @@ public class ResourceDecorator {
     
     public void addTextAttributes(ModelDomainNames name, String... value){
         for(String el : value){
-            addTextAttribute(name, el);
+            // We have to deal with reverse attribute here...
+            addMultiValuesTextAttribute(name, el, DataType.STRING);
         }
     }
     
@@ -108,7 +109,7 @@ public class ResourceDecorator {
         }
         return found.getValue();
     }
-    
+
     public List<String> getAttributeValues(ModelDomainNames name){
         if(name == null){
             return null;
@@ -150,6 +151,15 @@ public class ResourceDecorator {
             attribute = new ArrayList<AttributePOJO>();
         }
         attribute.add(new AttributePOJO(name.getName(), value, dtype));
+        resource.setAttribute(attribute);
+    }
+    
+    private void addMultiValuesTextAttribute(ModelDomainNames name, String value, DataType dtype) {
+        List<AttributePOJO> attribute = getClonedAttributeslist();
+        if(attribute == null){
+            attribute = new ArrayList<AttributePOJO>();
+        }
+        attribute.add(new AttributePOJO(value, name.getName(), dtype));
         resource.setAttribute(attribute);
     }
     
