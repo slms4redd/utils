@@ -96,7 +96,7 @@ public class ChangeMatrixTest extends Assert{
     }
     
     @Test
-    //@Ignore("This test is used as facility to run the process with production data stored locally...")
+    @Ignore("This test is used as facility to run the process with production data stored locally...")
     public void changeMatrixTest() throws IOException{
         
         if (!(new File(RASTER_REFERENCE_PATH).exists()) || !(new File(RASTER_ACTUAL_PATH).exists())
