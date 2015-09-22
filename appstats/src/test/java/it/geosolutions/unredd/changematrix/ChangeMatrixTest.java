@@ -101,7 +101,7 @@ public class ChangeMatrixTest{
             e.printStackTrace();
         }
     }
-	
+
     public void changeMatrixTest() throws IOException{
         
         if (!(new File(RASTER_REFERENCE_PATH).exists()) || !(new File(RASTER_ACTUAL_PATH).exists())
