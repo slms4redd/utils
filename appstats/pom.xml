@@ -27,10 +27,6 @@
                 </exclusion>
                 <exclusion>
                     <groupId>org.jaitools</groupId>
-                    <artifactId>jt-rangelookup</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jaitools</groupId>
                     <artifactId>jt-contour</artifactId>
                 </exclusion>
                 <exclusion>
@@ -59,6 +55,18 @@
             <groupId>org.jaitools</groupId>
             <artifactId>jt-classifiedstats</artifactId>
         </dependency>
+
+		<!-- =========================================================== -->
+		<!-- JAI-ext -->
+		<!-- =========================================================== -->
+		<dependency>
+		    <groupId>it.geosolutions-jai-ext</groupId>
+		    <artifactId>change-matrix</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>it.geosolutions.jaiext.rlookup</groupId>
+			<artifactId>jt-rlookup</artifactId>
+		</dependency>
 
         <!-- =========================================================== -->
         <!--  -->
