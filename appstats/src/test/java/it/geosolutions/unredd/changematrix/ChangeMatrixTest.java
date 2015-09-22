@@ -67,7 +67,7 @@ import org.junit.Test;
  * @author DamianoG
  *
  */
-public class ChangeMatrixTest extends Assert{
+public class ChangeMatrixTest{
     
     private final static Logger LOGGER = Logger.getLogger(ChangeMatrixTest.class);
 
@@ -82,10 +82,8 @@ public class ChangeMatrixTest extends Assert{
     private Integer TILE_WIDTH;
     private Integer TILE_HEIGTH;
     
-    @Before
-    public void loadTestParams() throws FileNotFoundException, IOException{
-        ChangeMatrixTest cmt = new ChangeMatrixTest();
-        Map<String,Object> map = cmt.loadDataConfigurations();
+    public ChangeMatrixTest(){
+        Map<String,Object> map = loadDataConfigurations();
         RASTER_REFERENCE_PATH = (String)map.get("RASTER_REFERENCE_PATH"); 
         RASTER_ACTUAL_PATH = (String)map.get("RASTER_ACTUAL_PATH");
         RASTER_PROVINCES_PATH = (String)map.get("RASTER_PROVINCES_PATH");
@@ -95,13 +93,20 @@ public class ChangeMatrixTest extends Assert{
         TILE_HEIGTH = Integer.parseInt((String) map.get("TILE_HEIGTH"));
     }
     
-    @Test
-    @Ignore("This test is used as facility to run the process with production data stored locally...")
+    public static void main(String [] args){
+        ChangeMatrixTest cmt = new ChangeMatrixTest();
+        try {
+            cmt.changeMatrixTest();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void changeMatrixTest() throws IOException{
         
         if (!(new File(RASTER_REFERENCE_PATH).exists()) || !(new File(RASTER_ACTUAL_PATH).exists())
                 || !(new File(RASTER_PROVINCES_PATH).exists()) || !(new File(AREA_LAYER).exists())) {
-            fail();
+            throw new IllegalStateException("One or more raster required don't exist!");
         }
         
         long startTime = System.currentTimeMillis();
@@ -189,29 +194,17 @@ public class ChangeMatrixTest extends Assert{
         try {
             sem.await();
         } catch (InterruptedException e) {
-            fail();
+            throw new IllegalStateException("An unknow error");
         }
         cm.freeze();
         // ------------------------------------------------------------------------------------------------------------------------------------        
 
         LOGGER.info("...Change Matrix results:\n");
         // Visualization of the results
-        // TODO Add some assert
-        DecimalFormat df = new DecimalFormat("#");
-        df.setMaximumFractionDigits(10);
-        df.setMaximumIntegerDigits(10);
-        int x=0;
-        int y=0;
-        for(int i=1; i<=19; i++){
-            for(int j=1; j<=19; j++){
-                x = (i==18)?99:i;
-                y = (j==18)?99:j;
-                x = (i==19)?Integer.MIN_VALUE:i;
-                y = (j==19)?Integer.MIN_VALUE:j;
-                LOGGER.info("(" + x + ", " + y + ") -num pixel--> '" + cm.retrievePairOccurrences(x, y) + "'");
-                LOGGER.info("(" + x + ", " + y + ") -     area--> '" + df.format(cm.retrieveTotalArea(x, y)) + "'");
-            }
-        }
+        
+        ChangeMatrixResultExporter cmre = new ChangeMatrixResultExporter(cm);
+        LOGGER.info(cmre.exportJSONAreaMatrix());
+        LOGGER.info(cmre.exportJSONPixelMatrix());
         
         long delta = (System.currentTimeMillis() - startTime) / 1000;
         LOGGER.info("--process lasted: --> '" + delta + "' seconds...");
@@ -252,26 +245,39 @@ public class ChangeMatrixTest extends Assert{
         }
     }
     
-    private Map loadDataConfigurations() throws FileNotFoundException, IOException{
+    private Map<String, Object> loadDataConfigurations(){
         Properties prop = new Properties();
-        File propFile = TestData.file(this, "changematrix-test.properties");
-        InputStream is = new FileInputStream(propFile);
-        if (is != null) {
-            prop.load(is);
-        } else {
-                throw new FileNotFoundException("property file '" + propFile + "' not found in the classpath");
-        }
-        Map<String, Object> map = new HashMap<String, Object>();
-        Iterator iter = prop.keySet().iterator();
-        while(iter.hasNext()){
-            String key = (String)iter.next();
-            map.put(key, prop.getProperty(key));
+        InputStream is = null;
+        Map<String, Object> map = null;
+        File propFile;
+        try {
+            propFile = TestData.file(this, "changematrix-test.properties");
+            is = new FileInputStream(propFile);
+            if (is != null) {
+                prop.load(is);
+            } else {
+                    throw new FileNotFoundException("property file '" + propFile + "' not found in the classpath");
+            }
+            map = new HashMap<String, Object>();
+            Iterator iter = prop.keySet().iterator();
+            while(iter.hasNext()){
+                String key = (String)iter.next();
+                map.put(key, prop.getProperty(key));
+            }
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } finally{
+            if(is!=null){
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    is = null;
+                }
+            }
         }
         return map;
     }
     
-    
-    @Test
     public void testFormats(){
         
         //double myvalue = 0.00000021d;
