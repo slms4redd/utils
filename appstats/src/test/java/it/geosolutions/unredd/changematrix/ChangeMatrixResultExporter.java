@@ -40,7 +40,16 @@ import java.util.TreeSet;
  */
 public class ChangeMatrixResultExporter {
 
+    /**
+     * Hold as a {@link Map} the total changed area calculated for all the transitions 
+     * among the specified classes in a ChangeMatrix
+     */
     Map<Integer, Map<Integer, Number>> areaMatrix;
+    
+    /**
+     * Hold as a {@link Map} the number of pixel changed for all the transitions
+     * among the specified classes in a ChangeMatrix 
+     */
     Map<Integer, Map<Integer, Number>> pixelMatrix;
     
     public ChangeMatrixResultExporter(ChangeMatrix cm){
@@ -73,17 +82,25 @@ public class ChangeMatrixResultExporter {
         matrix.get(xClazz).put(yClazz, value);
     }
     
+    /**
+     * Export as a JSON bidimensional array the change matrix (pixel count)
+     * @return
+     */
     public String exportJSONPixelMatrix(){
         return exportJSON(pixelMatrix);
     }
     
+    /**
+     * Export as a JSON bidimensional array the change matrix (area count)
+     * @return
+     */
     public String exportJSONAreaMatrix(){
         return exportJSON(areaMatrix);
     }
     
     private String exportJSON(Map<Integer, Map<Integer, Number>> matrix){
         StringBuilder sb = new StringBuilder();
-        sb.append("{\"data\":[");
+        sb.append("[");
         Set<Integer> keys = matrix.keySet();
         SortedSet<Integer> sortedKeys = new TreeSet<Integer>(keys);
         for(Integer x : sortedKeys){
@@ -104,7 +121,7 @@ public class ChangeMatrixResultExporter {
             sb.append("],");
         }
         sb.setLength(sb.length() - 1);
-        sb.append("]}");
+        sb.append("]");
         return sb.toString();
     }
 }
