@@ -92,11 +92,11 @@ public class ChangeMatrixResultExporterTest extends Assert{
     @Test
     public void changeMatrixJSONExporter(){
         
-        assertEquals("{\"data\":[[0,0,0,0],[0,0,12.12,0],[0,21,44,23.23],[0,0,0,0]]}", cmre.exportJSONAreaMatrix());
-        assertEquals("{\"data\":[[0,0,0,0],[0,0,1,0],[0,1,2,1],[0,0,3,1]]}", cmre.exportJSONPixelMatrix());
+        assertEquals("[[0,0,0,0],[0,0,12.12,0],[0,21,44,23.23],[0,0,0,0]]", cmre.exportJSONAreaMatrix());
+        assertEquals("[[0,0,0,0],[0,0,1,0],[0,1,2,1],[0,0,3,1]]", cmre.exportJSONPixelMatrix());
         cm.registerPair(2, 3, 5345345345.34534535);
         cmre = new ChangeMatrixResultExporter(cm);
-        assertEquals("{\"data\":[[0,0,0,0],[0,0,12.12,0],[0,21,44,5345345368.575345],[0,0,0,0]]}", cmre.exportJSONAreaMatrix());
+        assertEquals("[[0,0,0,0],[0,0,12.12,0],[0,21,44,5345345368.575345],[0,0,0,0]]", cmre.exportJSONAreaMatrix());
         
     }
 }
