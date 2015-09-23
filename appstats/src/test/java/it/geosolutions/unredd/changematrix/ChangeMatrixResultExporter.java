@@ -63,6 +63,10 @@ public class ChangeMatrixResultExporter {
         classesArr = classes.toArray(classesArr);
         for(Integer xClass : classesArr){
             for(Integer yClass : classesArr){
+                //we have also the nodata transitions here, we want to skip them
+                if(xClass == Integer.MIN_VALUE || yClass == Integer.MIN_VALUE){
+                    continue;
+                }
                 handleMatrix(cm, areaMatrix, xClass, yClass, true);
                 handleMatrix(cm, pixelMatrix, xClass, yClass, false);
             }
