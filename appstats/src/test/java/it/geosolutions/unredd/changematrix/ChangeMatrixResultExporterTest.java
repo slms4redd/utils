@@ -59,26 +59,22 @@ public class ChangeMatrixResultExporterTest extends Assert{
     public void changeMatrixDataExtractionTest(){
         
         assertNotNull(cmre.areaMatrix);
-        assertEquals(4, cmre.areaMatrix.size());
-        assertNotNull(cmre.areaMatrix.get(Integer.MIN_VALUE));
-        assertEquals(4, cmre.areaMatrix.get(Integer.MIN_VALUE).size());
+        assertEquals(3, cmre.areaMatrix.size());
         assertNotNull(cmre.areaMatrix.get(1));
-        assertEquals(4, cmre.areaMatrix.get(1).size());
+        assertEquals(3, cmre.areaMatrix.get(1).size());
         assertNotNull(cmre.areaMatrix.get(2));
-        assertEquals(4, cmre.areaMatrix.get(2).size());
+        assertEquals(3, cmre.areaMatrix.get(2).size());
         assertNotNull(cmre.areaMatrix.get(3));
-        assertEquals(4, cmre.areaMatrix.get(3).size());
+        assertEquals(3, cmre.areaMatrix.get(3).size());
         
         assertNotNull(cmre.pixelMatrix);
-        assertEquals(4, cmre.pixelMatrix.size());
-        assertNotNull(cmre.areaMatrix.get(Integer.MIN_VALUE));
-        assertEquals(4, cmre.areaMatrix.get(Integer.MIN_VALUE).size());
+        assertEquals(3, cmre.pixelMatrix.size());
         assertNotNull(cmre.pixelMatrix.get(1));
-        assertEquals(4, cmre.pixelMatrix.get(1).size());
+        assertEquals(3, cmre.pixelMatrix.get(1).size());
         assertNotNull(cmre.pixelMatrix.get(1));
-        assertEquals(4, cmre.pixelMatrix.get(2).size());
+        assertEquals(3, cmre.pixelMatrix.get(2).size());
         assertNotNull(cmre.pixelMatrix.get(1));
-        assertEquals(4, cmre.pixelMatrix.get(3).size());
+        assertEquals(3, cmre.pixelMatrix.get(3).size());
         
         assertEquals(2d, cmre.pixelMatrix.get(2).get(2));
         assertEquals(1d, cmre.pixelMatrix.get(2).get(3));
@@ -92,11 +88,11 @@ public class ChangeMatrixResultExporterTest extends Assert{
     @Test
     public void changeMatrixJSONExporter(){
         
-        assertEquals("[[0,0,0,0],[0,0,12.12,0],[0,21,44,23.23],[0,0,0,0]]", cmre.exportJSONAreaMatrix());
-        assertEquals("[[0,0,0,0],[0,0,1,0],[0,1,2,1],[0,0,3,1]]", cmre.exportJSONPixelMatrix());
+        assertEquals("[[0,12.12,0],[21,44,23.23],[0,0,0]]", cmre.exportJSONAreaMatrix());
+        assertEquals("[[0,1,0],[1,2,1],[0,3,1]]", cmre.exportJSONPixelMatrix());
         cm.registerPair(2, 3, 5345345345.34534535);
         cmre = new ChangeMatrixResultExporter(cm);
-        assertEquals("[[0,0,0,0],[0,0,12.12,0],[0,21,44,5345345368.575345],[0,0,0,0]]", cmre.exportJSONAreaMatrix());
+        assertEquals("[[0,12.12,0],[21,44,5345345368.575345],[0,0,0]]", cmre.exportJSONAreaMatrix());
         
     }
 }

@@ -19,16 +19,11 @@
  */
 package it.geosolutions.unredd;
 
-import it.geosolutions.unredd.stats.impl.DataFile;
-import it.geosolutions.unredd.stats.impl.RasterClassifiedStatistics;
-import it.geosolutions.unredd.stats.impl.StatsRunner;
-import it.geosolutions.unredd.stats.model.config.Output;
-import it.geosolutions.unredd.stats.model.config.Range;
-import it.geosolutions.unredd.stats.model.config.StatisticConfiguration;
-import it.geosolutions.unredd.stats.model.config.StatsType;
-
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -41,19 +36,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.log4j.Logger;
 import org.geotools.test.TestData;
 import org.jaitools.media.jai.classifiedstats.Result;
 import org.jaitools.numeric.Statistic;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import it.geosolutions.unredd.stats.impl.DataFile;
+import it.geosolutions.unredd.stats.impl.RasterClassifiedStatistics;
+import it.geosolutions.unredd.stats.impl.StatsRunner;
+import it.geosolutions.unredd.stats.model.config.Output;
+import it.geosolutions.unredd.stats.model.config.Range;
+import it.geosolutions.unredd.stats.model.config.StatisticConfiguration;
+import it.geosolutions.unredd.stats.model.config.StatsType;
 
 /**
  * @author DamianoG
  * 
  */
-public class StatsTests extends TestCase {
+public class StatsTests extends Assert{
 
     private final static Logger LOGGER = Logger.getLogger(StatsTests.class);
 
@@ -64,19 +68,17 @@ public class StatsTests extends TestCase {
     private static final String DEFAULT_CLASSIFICATOR = "test-data/forest_mask.tif";//TODO fix this, maybe don't work on linux
     private static final String OUTPUT_FILE = "outStats.csv";
     
-    /**
-     * If the dataset used to compute the stats is the default one perform some asserts, otherwise skip asserts
-     */
-    private static boolean isDefault = true;
-    
     private static final Statistic [] STATS = new Statistic[] { Statistic.SUM};
     
+    private static Map<MultiKey, List<Result>> results = null;
+    
     /**
-     * A simple test that runs the stats throught the RasterClassifiedStatistics, useful for test different data when problems occurs
+     * A simple test which runs the stats generation throught the RasterClassifiedStatistics, useful for test different data when problems occurs
      * You can configure the data used in /src/test/resources/testSimpleStats.properties to test your custom data and check if the stats are generated...
      * 
      */
-    public void testSimpleStats() {
+    @Test
+    public void simpleStatsTest() {
 
         RasterClassifiedStatistics rcs = new RasterClassifiedStatistics();
         
@@ -96,10 +98,7 @@ public class StatsTests extends TestCase {
             ost = OutputStatsTest.buildOutputStatsTest();
             ost.outputStats(results);
             
-            if(isDefault){
-                // do the checks only if the default data and clasificators layers are loaded
-                assertEquals(results.toString(),"{MultiKey[0]=[band 0 sum: 3449837399963,9688 Naccepted=9454812 (offered:9454812 - NoData:0 - NaN:0)  Classifier:MultiKey[0]], MultiKey[1]=[band 0 sum: 1599142551508,9062 Naccepted=4355376 (offered:4355376 - NoData:0 - NaN:0)  Classifier:MultiKey[1]]}");
-            }
+            assertEquals(results.toString(),"{MultiKey[0]=[band 0 sum: 3449837399963,9688 Naccepted=9454812 (offered:9454812 - NoData:0 - NaN:0)  Classifier:MultiKey[0]], MultiKey[1]=[band 0 sum: 1599142551508,9062 Naccepted=4355376 (offered:4355376 - NoData:0 - NaN:0)  Classifier:MultiKey[1]]}");
             
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -108,7 +107,56 @@ public class StatsTests extends TestCase {
         }
     }
     
-    public void testStatsWithRanges() {
+    @Test
+    public void statsWithRangesTest(){
+        assertEquals(results.toString(),"{MultiKey[0]=[band 0 sum: 3449837399963,9688 Naccepted=9454812 (offered:9454812 - NoData:0 - NaN:0)  Classifier:MultiKey[0]], MultiKey[1]=[band 0 sum: 1599142551508,9062 Naccepted=4355376 (offered:4355376 - NoData:0 - NaN:0)  Classifier:MultiKey[1]]}");
+    }
+    
+    
+    @Test
+    public void outputCSVTest() throws IOException{
+        StatisticConfiguration config = new StatisticConfiguration();
+        Output outputObj = new Output();
+        outputObj.setFile(TestData.temp(this, "stats.txt").getAbsolutePath());
+        outputObj.setFormat(Output.FORMAT_CSV);
+        config.setOutput(outputObj);
+        OutputStatsTest ost = new OutputStatsTest(config);
+        ost.outputStats(results);
+        File f = new File(ost.getOutputFile());
+        FileReader fr = new FileReader(f);
+        BufferedReader br = new BufferedReader(fr);
+        StringBuilder sb = new StringBuilder();
+        for(String line; (line = br.readLine())!=null;){
+            sb.append(line);
+        }
+        fr.close();
+        br.close();
+        assertEquals("0,1,",sb.toString());
+    }
+    
+    @Test
+    public void outputJSON_ARRAYTest() throws IOException{
+        StatisticConfiguration config = new StatisticConfiguration();
+        Output outputObj = new Output();
+        outputObj.setFile(TestData.temp(this, "stats.txt").getAbsolutePath());
+        outputObj.setFormat(Output.FORMAT_JSON_ARRAY);
+        config.setOutput(outputObj);
+        OutputStatsTest ost = new OutputStatsTest(config);
+        ost.outputStats(results);
+        File f = new File(ost.getOutputFile());
+        FileReader fr = new FileReader(f);
+        BufferedReader br = new BufferedReader(fr);
+        StringBuilder sb = new StringBuilder();
+        for(String line; (line = br.readLine())!=null;){
+            sb.append(line);
+        }
+        fr.close();
+        br.close();
+        assertEquals("[[0],[1]]",sb.toString());
+    }
+    
+    @BeforeClass
+    public static  void computeStats() {
 
         RasterClassifiedStatistics rcs = new RasterClassifiedStatistics();
         
@@ -120,6 +168,7 @@ public class StatsTests extends TestCase {
             classificatorsList.add(new DataFile(prop.get(CLASSIFICATOR_PREFIX + (i+1))));
         }
         OutputStatsTest ost = null;
+        Map<MultiKey, List<Result>> results = null;
         try {
             // run the stats
             DataFile df = new DataFile(prop.get(DATA));
@@ -129,26 +178,13 @@ public class StatsTests extends TestCase {
             List<Range> arrList = new ArrayList<Range>();
             arrList.add(r);
             df.setRanges(arrList);
-            Map<MultiKey, List<Result>> results = rcs.execute(true, df, classificatorsList, Arrays
+            results = rcs.execute(true, df, classificatorsList, Arrays
                     .asList(STATS));
             LOGGER.info(results.toString());
-            ost = OutputStatsTest.buildOutputStatsTest();
-            ost.outputStats(results);
-            
-            if(isDefault){
-                // do the checks only if the default data and clasificators layers are loaded
-                assertEquals(results.toString(),"{MultiKey[0]=[band 0 sum: 3449837399963,9688 Naccepted=9454812 (offered:9454812 - NoData:0 - NaN:0)  Classifier:MultiKey[0]], MultiKey[1]=[band 0 sum: 1599142551508,9062 Naccepted=4355376 (offered:4355376 - NoData:0 - NaN:0)  Classifier:MultiKey[1]]}");
-            }
-            
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
-        } /*finally{
-            File of = new File(ost.getOutputFile());
-            of.delete();
-            if(of.exists()){
-                fail("Failed when try to remove tmp files...");
-            }
-        }*/
+        }
+        StatsTests.results = results;
     }
     
     private static Map<String, File> loadTestParams(){
@@ -176,7 +212,6 @@ public class StatsTests extends TestCase {
             }
             else{
                 map.put(key, new File(prop.getProperty(key)));
-                isDefault = false;
             }
         }
         return map;

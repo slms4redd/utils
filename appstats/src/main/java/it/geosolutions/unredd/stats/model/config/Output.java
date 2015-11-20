@@ -30,6 +30,7 @@ public class Output {
     public static final String EMPTY = "_EMPTY_";
 
     public static final String FORMAT_CSV = "CSV";
+    public static final String FORMAT_JSON_ARRAY = "JSON_ARRAY";
     public static final String SEPARATOR_COMMA = ",";
 
     private String format;
@@ -70,7 +71,9 @@ public class Output {
     }
 
     public String getSeparator() {
-        return separator!=null ? separator : SEPARATOR_COMMA;
+        separator = (separator!=null) ? separator : SEPARATOR_COMMA;
+        separator = (format==FORMAT_JSON_ARRAY) ? SEPARATOR_COMMA : separator;
+        return separator;
     }
 
     public void setSeparator(String separator) {

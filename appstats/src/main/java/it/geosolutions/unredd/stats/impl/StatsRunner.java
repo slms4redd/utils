@@ -22,6 +22,7 @@ package it.geosolutions.unredd.stats.impl;
 import it.geosolutions.unredd.stats.model.config.ClassificationLayer;
 import it.geosolutions.unredd.stats.model.config.StatisticConfiguration;
 import it.geosolutions.unredd.stats.model.config.StatsType;
+import it.geosolutions.unredd.stats.model.config.util.CSVConverter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -303,6 +304,7 @@ public class StatsRunner {
         }
 
         closeOutputFile();
+        CSVConverter.convertFromCSV(cfg);
     }
 
     public void output(StringBuilder sb) {
