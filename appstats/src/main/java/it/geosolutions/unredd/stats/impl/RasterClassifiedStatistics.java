@@ -5,13 +5,11 @@
 
 package it.geosolutions.unredd.stats.impl;
 
-import it.geosolutions.unredd.stats.RangeParser;
-import it.geosolutions.unredd.stats.model.config.Layer;
-
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +33,8 @@ import org.jaitools.numeric.Range;
 import org.jaitools.numeric.Statistic;
 
 import com.sun.media.jai.operator.ImageReadDescriptor;
+
+import it.geosolutions.unredd.stats.RangeParser;
 
 /**
  * A process computing classified statistics based on a raster data set and a set of raster classification layers
@@ -102,8 +102,8 @@ public class RasterClassifiedStatistics {
 
         try {
             dataImage = loadImage(deferredMode, dataFile.getFile());
-            List<Range> dataRanges = extractJAIRange(dataFile);
             classifiers = new RenderedImage[classificationFiles.size()];
+            List<Range> dataRanges = extractJAIRange(classificationFiles);
             classNoData = new Double[classificationFiles.size()];
             
             int i = 0;
@@ -187,9 +187,13 @@ public class RasterClassifiedStatistics {
         }
     }
     
-    public List<Range> extractJAIRange(DataFile layer){
-        
-        List<RangeParser> rList = layer.getRanges();
+    public List<Range> extractJAIRange(List<DataFile> layers){
+        List<RangeParser> rList = new LinkedList<RangeParser>();
+        for(DataFile f : layers){
+            if(f.getRanges() != null){
+                rList.addAll(f.getRanges());
+            }
+        }
         List<Range> outList = new ArrayList<Range>();
         if(rList != null && !rList.isEmpty()){
             for(RangeParser rp : rList){
