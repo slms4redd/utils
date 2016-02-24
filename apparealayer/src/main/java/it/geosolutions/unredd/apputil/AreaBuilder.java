@@ -213,7 +213,7 @@ public class AreaBuilder {
         return grid;
     }
 
-    protected static void saveAreaGrid(GridCoverage2D grid, File output) throws IOException{
+    public static void saveAreaGrid(GridCoverage2D grid, File output) throws IOException{
         LOGGER.info("AREAGRIDPROCESS: saving area grid");
 
         GeoTiffWriter writer = new GeoTiffWriter(output);

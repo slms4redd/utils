@@ -1,6 +1,4 @@
 /*
- *  GeoBatch - Open Source geospatial batch processing system
- *  https://github.com/nfms4redd/nfms-geobatch
  *  Copyright (C) 2007-2008-2009 GeoSolutions S.A.S.
  *  http://www.geo-solutions.it
  *
@@ -21,39 +19,30 @@
  */
 package it.geosolutions.arealayer;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+
+import org.geotools.coverage.grid.GridCoverage2D;
+import org.junit.Assert;
+import org.junit.Test;
+
+import it.geosolutions.unredd.apputil.AreaBuilder;
 
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+public class AreaGridProcessTest extends Assert{
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    @Test
+    public void testArea() throws Exception{
+        
+        //compute the area in km2
+        File outFileKM2=File.createTempFile("testImageKM2", ".tif");
+        GridCoverage2D gridKM2 = AreaBuilder.createAreaGrid(2, 2, 109f, 8f, 108f, 10f);
+        AreaBuilder.saveAreaGrid(gridKM2, outFileKM2);
+        
+        BufferedImage imgKM2 = ImageIO.read(outFileKM2);
     }
 }
