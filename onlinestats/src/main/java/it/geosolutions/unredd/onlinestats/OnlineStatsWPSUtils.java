@@ -1,6 +1,6 @@
 /*
  *  GeoBatch - Open Source geospatial batch processing system
- *  https://github.com/nfms4redd/nfms-geobatch
+ *  https://github.com/slms4redd/nfms-geobatch
  *  Copyright (C) 2007-2012 GeoSolutions S.A.S.
  *  http://www.geo-solutions.it
  *

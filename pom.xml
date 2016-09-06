@@ -22,7 +22,7 @@
     <name>UN-REDD utils: root</name>
     <description>UNREDD util libraries - Root module</description>
 
-    <url>https://github.com/nfms4redd/nfms-utils</url>
+    <url>https://github.com/slms4redd/nfms-utils</url>
 
     <!--    <scm>
             <connection>scm:svn:http://svn.geotools.org/geotools/trunk/gt/modules/</connection>
@@ -60,18 +60,18 @@
 
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/nfms4redd/nfms-utils/issues</url>
+        <url>https://github.com/slms4redd/nfms-utils/issues</url>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/nfms4redd/nfms-utils</url>
-        <connection>scm:git:git@github.com:nfms4redd/nfms-utils.git</connection>
+        <url>https://github.com/slms4redd/nfms-utils</url>
+        <connection>scm:git:git@github.com:slms4redd/nfms-utils.git</connection>
     </scm>
 
     <distributionManagement>
         <repository>
-            <id>nfms4redd</id>
-            <url>ftp://maven.nfms4redd.org/repo</url>
+            <id>slms4redd</id>
+            <url>ftp://maven.slms4redd.org/repo</url>
             <uniqueVersion>false</uniqueVersion>
         </repository>
     </distributionManagement>
@@ -321,9 +321,9 @@
     <repositories>
 
         <repository>
-            <id>nfms4redd</id>
-            <name>nfms4redd maven repository</name>
-            <url>http://maven.nfms4redd.org/</url>
+            <id>slms4redd</id>
+            <name>slms4redd maven repository</name>
+            <url>http://maven.slms4redd.org/</url>
         </repository>
 
         <!-- used for jaitools 1.2-GAEZ -->
